@@ -1,0 +1,5 @@
+$HTTP["host"] =~ "(www.)?domain.com$" {
+    url.rewrite = (
+        "^/(.+)/?$"  => "/index.php/$1",
+    )
+}

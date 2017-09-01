@@ -1,0 +1,29 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: a
+ * Date: 2017/8/14
+ * Time: 10:01
+ */
+
+namespace app\common\base;
+
+
+use Tiny\Application;
+use Tiny\Controller\ControllerFis;
+use Tiny\Func;
+
+class BaseControllerFis extends ControllerFis
+{
+    public function beforeAction()
+    {
+        parent::beforeAction();
+        $appname = Application::app()->getName();
+        $config_dir = ROOT_PATH . Func::joinNotEmpty(DIRECTORY_SEPARATOR, ["{$appname}-public", 'tpl']);
+        $template_dir = ROOT_PATH . Func::joinNotEmpty(DIRECTORY_SEPARATOR, ["{$appname}-public", 'tpl']);
+        $this->setFisReleasePath($config_dir, $template_dir);
+
+        $this->assign('webname', Application::app()->getEnv('ENV_WEB', [])['name']);
+    }
+
+}

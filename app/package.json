@@ -1,0 +1,18 @@
+{
+  "name": "fis3-pure-php",
+  "version": "0.0.1",
+  "repository": "",
+  "description": "fis 3.0 DEMO",
+  "dependencies": {
+    "fis3-hook-module": "*",
+    "fis3-hook-node_modules": "*",
+    "fis3-hook-commonjs": "*"
+  },
+  "keywords": [
+    "fis3"
+  ],
+  "author": {
+    "name": "fis"
+  },
+  "license": "MIT"
+}

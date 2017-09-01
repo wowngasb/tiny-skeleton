@@ -1,0 +1,45 @@
+{
+  "name": "wowngasb/tiny-skeleton",
+  "description": "A Tiny Framework skeleton application for rapid development",
+  "keywords": [
+    "framework",
+    "tiny",
+    "router"
+  ],
+  "homepage": "http://github.com/wowngasb/tiny-skeleton",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Kong Lin",
+      "email": "wuyou7410@gmail.com",
+      "homepage": "http://github.com/wowngasb/"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.9",
+    "webonyx/graphql-php": "^0.10",
+    "phpFastCache/phpFastCache": "^5.0",
+    "illuminate/database": "5.2.*",
+    "guzzlehttp/guzzle": "^6.3"
+  },
+  "require-dev": {
+    "php-console/php-console": "^3.1",
+    "phpunit/phpunit": "^4.8",
+    "php-mock/php-mock-phpunit": "^1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "app\\": "app/",
+      "tests\\": "tests/",
+      "Tiny\\": "Tiny/"
+    }
+  },
+  "scripts": {
+    "start": "php -S 0.0.0.0:8080 -t app-public app-public/index.php",
+    "test": "phpunit"
+  },
+  "config": {
+    "preferred-install": "dist",
+    "secure-http": false
+  }
+}
