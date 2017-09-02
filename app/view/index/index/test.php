@@ -26,7 +26,7 @@
 
 </head>
 <body>
-<p>App:<?= $appname ?>, web:<?= htmlspecialchars($webname) ?>, route:<?= $request->getCurrentRoute() ?><p>
+<p>Test App:<?= $appname ?>, web:<?= htmlspecialchars($webname) ?>, route:<?= $request->getCurrentRoute() ?><p>
 <h1>a = <?= $a ?></h1>
 <h1>b = <?= $b ?></h1>
 <h1>sum = <?= $sum ?></h1>

@@ -562,6 +562,7 @@ class FuncTest extends BaseNothingTest
         12345.6789,
         '123456789',
         'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        'akjdhawi323 234^$%#@213719823 hjadbgqu2y3r1276JHDWGSuqyw4352367432165432984238074530856szhbdchsaeryt324uahzddwad',
     ];
 
     public function test_safe_base64()
@@ -627,21 +628,33 @@ class FuncTest extends BaseNothingTest
         $key = 'zT5hF$E24*(#dfS^Yq3&6A^6';
         $test_i = 'abc';
         $rst = Func::encode($test_i, $key, 10);
-
+        /* echo "\n".Func::encode('', $key, 10)."\n";
+        echo "\n".Func::encode('1', $key, 10)."\n";
+        echo "\n".Func::encode('12', $key, 10)."\n";
+        echo "\n".Func::encode('123', $key, 10)."\n";
+        echo "\n".Func::encode('1234', $key, 10)."\n";
+        echo "\n".Func::encode('12345', $key, 10)."\n";
+        echo "\n".Func::encode('123456', $key, 10)."\n";
+        echo "\n".Func::encode('1234567', $key, 10)."\n";
+        echo "\n".Func::encode('12345678', $key, 10)."\n";
+        echo "\n".Func::encode('12345678', $key, 10)."\n";
+        echo "\n".Func::encode('12345678', $key, 10)."\n";
+        echo "\n".Func::encode('12345678', $key, 10)."\n"; */
+        
         $test_o = Func::decode($rst, $key);
         PHPUnit_Framework_Assert::assertEquals($test_i, $test_o);
     }
 
     public function test_authcode()
     {
-        $key = 'zT5hF$E24*(#dfS^Yq3&6A^6';
+        $key = 'zT5hF$E24*(#dfS^Yq3&6A^1';
         foreach (self::$test_str_data as $test_i) {
             $rst = Func::encode($test_i, $key);
             $test_o = Func::decode($rst, $key);
             PHPUnit_Framework_Assert::assertEquals($test_i, $test_o);
         }
 
-        $key = 'zT5hF$E24*(#dfS^Yq3&6A^6';
+        $key = 'zT5hF$E24*(#dfS^Yq3&6A^2';
         foreach (self::$test_str_data as $test_i) {
             $test_i = strval($test_i);
             $rst = Func::encode($test_i, $key);
@@ -649,8 +662,8 @@ class FuncTest extends BaseNothingTest
             PHPUnit_Framework_Assert::assertEquals($test_i, $test_o);
         }
 
-        $key1 = 'zT5hF$E24*(#dfS^Yq3&6A^6';
-        $key2 = 'zT5hF$E24*(#dfS^Yq3&6A^5';
+        $key1 = 'zT5hF$E24*(#dfS^Yq3&6A^3';
+        $key2 = 'zT5hF$E24*(#dfS^Yq3&6A^4';
         foreach (self::$test_str_data as $test_i) {
             $rst = Func::encode($test_i, $key1);
             $test_o = Func::decode($rst, $key2);

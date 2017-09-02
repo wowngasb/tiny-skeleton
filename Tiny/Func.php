@@ -424,11 +424,9 @@ class Func
         return $char;
     }
 
-
     ##########################
     ######## 编码相关 ########
     ##########################
-
 
     public static function safe_base64_encode($str)
     {
@@ -468,28 +466,24 @@ class Func
      * @param string $string 需要加密的字符串
      * @param string $key
      * @param int $expiry 加密生成的数据 的 有效期 为0表示永久有效， 单位 秒
+     * @param string $salt
      * @return string 加密结果 使用了 safe_base64_encode
      */
-    public static function encode($string, $key, $expiry = 0)
+    public static function encode($string, $key, $expiry = 0, $salt = 'salt')
     {
-        if (empty($string)) {
-            return '';
-        }
-        return static::authcode($string, 'ENCODE', $key, $expiry);
+        return static::authcode(strval($string), 'ENCODE', $key, $expiry, $salt);
     }
 
     /**
      * 解密函数 使用 配置 CRYPT_KEY 作为 key  成功返回原字符串  失败或过期 返回 空字符串
      * @param string $string 需解密的 字符串 safe_base64_encode 格式编码
      * @param string $key
+     * @param string $salt
      * @return string 解密结果
      */
-    public static function decode($string, $key)
+    public static function decode($string, $key, $salt = 'salt')
     {
-        if (empty($string)) {
-            return '';
-        }
-        return static::authcode($string, 'DECODE', $key);
+        return static::authcode(strval($string), 'DECODE', $key, 0, $salt);
     }
 
     /**
@@ -497,23 +491,26 @@ class Func
      * @param string $operation
      * @param string $key
      * @param int $expiry
-     * @param int $ckey_length 动态密匙长度，相同的明文会生成不同密文就是依靠动态密匙
+     * @param string $salt
+     * @param int $keyc_length 动态密匙长度，相同的明文会生成不同密文就是依靠动态密匙
      * @return string
      */
-    public static function authcode($string, $operation, $key, $expiry = 0, $ckey_length = 2)
+    public static function authcode($_string, $operation, $_key, $_expiry = 0, $salt = '', $keyc_length = 2)
     {
-        $key = md5($key);// 密匙
-        $keya = md5(substr($key, 0, 16));// 密匙a会参与加解密
-        $keyb = md5(substr($key, 16, 16));// 密匙b会用来做数据完整性验证
-        $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length) : static::rand_str($ckey_length)) : '';// 密匙c用于变化生成的密文
-        $cryptkey = $keya . md5($keya . $keyc);// 参与运算的密匙
+        $key = md5($salt . $_key . 'origin key');// 密匙
+        $keya = md5($salt . substr($key, 0, 16) . 'key a for crypt');// 密匙a会参与加解密
+        $keyb = md5($salt . substr($key, 16, 16) . 'key b for check sum');// 密匙b会用来做数据完整性验证
+        $keyc = $keyc_length ? ($operation == 'DECODE' ? substr($_string, 0, $keyc_length) : static::rand_str($keyc_length)) : '';// 密匙c用于变化生成的密文
+        $checksum = crc32($salt . $_string . $keyb);
+        $expiry_at = $_expiry > 0 ? $_expiry + time() : 0;
+        $cryptkey = $keya . md5($salt . $keya . $keyc. 'merge key a and key c');// 参与运算的密匙
         $key_length = strlen($cryptkey);
-        // 明文，前10位用来保存时间戳，解密时验证数据有效性，10到26位用来保存$keyb(密匙b)，
-        //解密时会通过这个密匙验证数据完整性
-        // 如果是解码的话，会从第$ckey_length位开始，因为密文前$ckey_length位保存 动态密匙，以保证解密正确
-        $string = $operation == 'DECODE' ? static::safe_base64_decode(substr($string, $ckey_length)) : pack('L', $expiry > 0 ? $expiry + time() : 0) . hex2bin(substr(md5($string . $keyb), 0, 8)) . $string;
+        // 加密，原数据补充附加信息，共 8byte  前 4 Byte 用来保存时间戳，后 4 Byte 用来保存 $checksum 解密时验证数据完整性
+        // 解码，会从第 $keyc_length Byte开始，因为密文前 $keyc_length Byte保存 动态密匙
+        $string = $operation == 'DECODE' ? static::safe_base64_decode(substr($_string, $keyc_length)) : pack('L', $expiry_at) . pack('L', $checksum) . $_string;
         $string_length = strlen($string);
-        $result = '';
+
+        $result_list = [];
         $box = range(0, 255);
         $rndkey = [];
         // 产生密匙簿
@@ -522,7 +519,7 @@ class Func
         }
         // 用固定的算法，打乱密匙簿，增加随机性，好像很复杂，实际上对并不会增加密文的强度
         for ($j = $i = 0; $i < 256; $i++) {
-            $j = ($j + $box[$i] + $rndkey[$i]) % 256;
+            $j = ($i + $j + $box[$i] + $box[$j] + $rndkey[$i] + $rndkey[$j]) % 256;
             $tmp = $box[$i];
             $box[$i] = $box[$j];
             $box[$j] = $tmp;
@@ -535,14 +532,18 @@ class Func
             $box[$a] = $box[$j];
             $box[$j] = $tmp;
             // 从密匙簿得出密匙进行异或，再转成字符
-            $result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256]));
+            $result_list[] = chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256]));
         }
+
+        $result = join('', $result_list);
         if ($operation == 'DECODE') {
-            // 验证数据有效性，请看未加密明文的格式
-            $time = strlen($result) >= 4 ? unpack('L', substr($result, 0, 4))[1] : 0;
-            $string = substr($result, 8);
-            if (($time == 0 || $time > time()) && bin2hex(substr($result, 4, 4)) == substr(md5($string . $keyb), 0, 8)) {
-                return $string;
+            // 验证数据有效性
+            $result_len_ = strlen($result);
+            $expiry_at_ = $result_len_ >= 4 ? unpack('L', substr($result, 0, 4))[1] : 0;
+            $checksum_ = $result_len_ >= 8 ? unpack('L', substr($result, 4, 4))[1] : 0;
+            $string_ = $result_len_ >= 8 ? substr($result, 8) : '';
+            if (($expiry_at_ == 0 || $expiry_at_ > time()) && $checksum_ == crc32($salt . $string_ . $keyb) ) {
+                return $string_;
             } else {
                 return '';
             }
@@ -550,7 +551,6 @@ class Func
             return $keyc . static::safe_base64_encode($result);
         }
     }
-
 
     /**
      * xss 清洗数组 尝试对数组中特定字段进行处理
