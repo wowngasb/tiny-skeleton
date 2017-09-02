@@ -26,12 +26,12 @@
 
 </head>
 <body>
-<p>app:<?= $appname ?>, web:<?= htmlspecialchars($webname) ?>, route:<?= $request->getCurrentRoute() ?><p>
+<p>App:<?= $appname ?>, web:<?= htmlspecialchars($webname) ?>, route:<?= $request->getCurrentRoute() ?><p>
 <h1>a = <?= $a ?></h1>
 <h1>b = <?= $b ?></h1>
 <h1>sum = <?= $sum ?></h1>
 <h1 id="api-test"></h1>
-<?= \Tiny\Plugin\Fis::import('view/index/index/test.css') ?>
+<?= \Tiny\Plugin\Fis::import('view/index/index/test2.css') ?>
 
 <?= \Tiny\Plugin\Fis::styleStart() ?>
 <style type="text/css">
@@ -41,7 +41,7 @@
 </style>
 <?= \Tiny\Plugin\Fis::styleEnd() ?>
 <hr/>
-<?= \Tiny\Plugin\Fis::widget('widget/index/test-widget.php', array_merge($tpl_vars, ['list' => ['item 1', 'item 2', 'item 3'], 'title' => 'TEST'])) ?>
+<?= \Tiny\View\ViewFis::widget('widget/index/test-widget.php', array_merge($tpl_vars, ['list' => ['item 1', 'item 2', 'item 3'], 'title' => 'TEST'])) ?>
 </body>
 <?= \Tiny\Plugin\Fis::import('static/jquery/jquery-1.7.2.min.js', false) ?>
 

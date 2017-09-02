@@ -9,11 +9,84 @@
 namespace Tiny;
 
 
-final class Func
+class Func
 {
+
+    public static function _class()
+    {
+        return static::class;
+    }
+
     public static function _namespace()
     {
         return __NAMESPACE__;
+    }
+
+
+    public static function jsonEncode($var)
+    {
+        if (function_exists('json_encode')) {
+            return json_encode($var);
+        } else {
+            switch (gettype($var)) {
+                case 'boolean':
+                    return $var ? 'true' : 'false';
+                case 'integer':
+                case 'double':
+                    return $var;
+                case 'resource':
+                case 'string':
+                    return '"' . str_replace(array("\r", "\n", "<", ">", "&"),
+                        array('\r', '\n', '\x3c', '\x3e', '\x26'),
+                        addslashes($var)) . '"';
+                case 'array':
+                    if (empty ($var) || array_keys($var) === range(0, sizeof($var) - 1)) {
+                        $output = array();
+                        foreach ($var as $v) {
+                            $output[] = static::jsonEncode($v);
+                        }
+                        return '[ ' . implode(', ', $output) . ' ]';
+                    } else {
+                        $output = array();
+                        foreach ($var as $k => $v) {
+                            $output[] = static::jsonEncode(strval($k)) . ': ' . static::jsonEncode($v);
+                        }
+                        return '{ ' . implode(', ', $output) . ' }';
+                    }
+                case 'object':
+                    $output = array();
+                    foreach ($var as $k => $v) {
+                        $output[] = static::jsonEncode(strval($k)) . ': ' . static::jsonEncode($v);
+                    }
+                    return '{ ' . implode(', ', $output) . ' }';
+                default:
+                    return 'null';
+            }
+        }
+    }
+
+    public static function mkdir_r($dir, $rights = 666)
+    {
+        if (!is_dir($dir)) {
+            static::mkdir_r(dirname($dir), $rights);
+            mkdir($dir, $rights);
+        }
+    }
+
+    public static function getfiles($path, array $last = [])
+    {
+        foreach (scandir($path) as $afile) {
+            if ($afile == '.' || $afile == '..') {
+                continue;
+            }
+            $_path = "{$path}/{$afile}";
+            if (is_dir($_path)) {
+                $last = array_merge($last, static::getfiles($_path, $last));
+            } else if (is_file($_path)) {
+                $last[$_path] = $afile;
+            }
+        }
+        return $last;
     }
 
     ##########################
@@ -180,7 +253,7 @@ final class Func
                 }
             }
             //未找到合适的单位  使用最大 tag T 进行输出
-            return self::byte2size($num, '', 'T', $dot);
+            return static::byte2size($num, '', 'T', $dot);
         }
     }
 
@@ -230,7 +303,7 @@ final class Func
 
     public static function stri_cmp($str1, $str2)
     {
-        return self::str_cmp(strtolower($str1), strtolower($str2));
+        return static::str_cmp(strtolower($str1), strtolower($str2));
     }
 
     public static function str_startwith($str, $needle)
@@ -240,7 +313,7 @@ final class Func
             return true;
         }
         $tmp = substr($str, 0, $len);
-        return self::str_cmp($tmp, $needle);
+        return static::str_cmp($tmp, $needle);
 
     }
 
@@ -251,7 +324,7 @@ final class Func
             return true;
         }
         $tmp = substr($haystack, -$len);
-        return self::str_cmp($tmp, $needle);
+        return static::str_cmp($tmp, $needle);
     }
 
     public static function stri_startwith($str, $needle)
@@ -261,7 +334,7 @@ final class Func
             return true;
         }
         $tmp = substr($str, 0, $len);
-        return self::stri_cmp($tmp, $needle);
+        return static::stri_cmp($tmp, $needle);
 
     }
 
@@ -272,7 +345,7 @@ final class Func
             return true;
         }
         $tmp = substr($haystack, -$len);
-        return self::stri_cmp($tmp, $needle);
+        return static::stri_cmp($tmp, $needle);
     }
 
     public static function trimlower($string)
@@ -326,7 +399,7 @@ final class Func
         if (!empty($matches)) {
             foreach ($matches[0] as $uchr) {
                 if (!isset($utf8_map[$uchr])) {
-                    $utf8_map[$uchr] = self::unicode_decode_char($uchr);
+                    $utf8_map[$uchr] = static::unicode_decode_char($uchr);
                 }
             }
         }
@@ -402,7 +475,7 @@ final class Func
         if (empty($string)) {
             return '';
         }
-        return self::authcode($string, 'ENCODE', $key, $expiry);
+        return static::authcode($string, 'ENCODE', $key, $expiry);
     }
 
     /**
@@ -416,7 +489,7 @@ final class Func
         if (empty($string)) {
             return '';
         }
-        return self::authcode($string, 'DECODE', $key);
+        return static::authcode($string, 'DECODE', $key);
     }
 
     /**
@@ -432,13 +505,13 @@ final class Func
         $key = md5($key);// 密匙
         $keya = md5(substr($key, 0, 16));// 密匙a会参与加解密
         $keyb = md5(substr($key, 16, 16));// 密匙b会用来做数据完整性验证
-        $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length) : self::rand_str($ckey_length)) : '';// 密匙c用于变化生成的密文
+        $keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length) : static::rand_str($ckey_length)) : '';// 密匙c用于变化生成的密文
         $cryptkey = $keya . md5($keya . $keyc);// 参与运算的密匙
         $key_length = strlen($cryptkey);
         // 明文，前10位用来保存时间戳，解密时验证数据有效性，10到26位用来保存$keyb(密匙b)，
         //解密时会通过这个密匙验证数据完整性
         // 如果是解码的话，会从第$ckey_length位开始，因为密文前$ckey_length位保存 动态密匙，以保证解密正确
-        $string = $operation == 'DECODE' ? self::safe_base64_decode(substr($string, $ckey_length)) : pack('L', $expiry > 0 ? $expiry + time() : 0) . hex2bin(substr(md5($string . $keyb), 0, 8)) . $string;
+        $string = $operation == 'DECODE' ? static::safe_base64_decode(substr($string, $ckey_length)) : pack('L', $expiry > 0 ? $expiry + time() : 0) . hex2bin(substr(md5($string . $keyb), 0, 8)) . $string;
         $string_length = strlen($string);
         $result = '';
         $box = range(0, 255);
@@ -474,7 +547,7 @@ final class Func
                 return '';
             }
         } else {
-            return $keyc . self::safe_base64_encode($result);
+            return $keyc . static::safe_base64_encode($result);
         }
     }
 
@@ -489,7 +562,7 @@ final class Func
     {
         foreach ($keys as $key) {
             if (!empty($data[$key]) && is_string($data[$key])) {
-                $data[$key] = self::xss_clean($data[$key]);
+                $data[$key] = static::xss_clean($data[$key]);
             }
         }
         return $data;
@@ -583,7 +656,7 @@ EOT;
     public static function method2field($str)
     {
         $str = static::method2name($str);
-        return self::humpToLine($str);
+        return static::humpToLine($str);
     }
 
     /**
@@ -594,7 +667,7 @@ EOT;
     public static function class2table($str)
     {
         $str = static::class2name($str);
-        return self::humpToLine($str);
+        return static::humpToLine($str);
     }
 
     /**
@@ -669,13 +742,13 @@ EOT;
      */
     public static function this_url()
     {
-        if (isset(self::$_http_info_cache[__METHOD__])) {
-            return self::$_http_info_cache[__METHOD__];
+        if (isset(static::$_http_info_cache[__METHOD__])) {
+            return static::$_http_info_cache[__METHOD__];
         }
         $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
         $url = SYSTEM_HOST . substr($uri, 1);
 
-        self::$_http_info_cache[__METHOD__] = $url;
+        static::$_http_info_cache[__METHOD__] = $url;
         return $url;
     }
 
@@ -686,8 +759,8 @@ EOT;
      */
     public static function request_header()
     {
-        if (isset(self::$_http_info_cache[__METHOD__])) {
-            return self::$_http_info_cache[__METHOD__];
+        if (isset(static::$_http_info_cache[__METHOD__])) {
+            return static::$_http_info_cache[__METHOD__];
         }
         /**
          * 补全 apache_request_headers 函数
@@ -729,7 +802,7 @@ EOT;
             $header[strtolower($key)] = $item;
         }
 
-        self::$_http_info_cache[__METHOD__] = $header;
+        static::$_http_info_cache[__METHOD__] = $header;
         return $header;
     }
 
@@ -739,8 +812,8 @@ EOT;
      */
     public static function agent_browser()
     {
-        if (isset(self::$_http_info_cache[__METHOD__])) {
-            return self::$_http_info_cache[__METHOD__];
+        if (isset(static::$_http_info_cache[__METHOD__])) {
+            return static::$_http_info_cache[__METHOD__];
         }
         $browser = [];
         $sys = $_SERVER['HTTP_USER_AGENT'];  //获取用户代理字符串
@@ -778,14 +851,14 @@ EOT;
             $browser[1] = "";
         }
 
-        self::$_http_info_cache[__METHOD__] = $browser;
+        static::$_http_info_cache[__METHOD__] = $browser;
         return $browser;
     }
 
     public static function is_mobile()
     {
-        if (isset(self::$_http_info_cache[__METHOD__])) {
-            return self::$_http_info_cache[__METHOD__];
+        if (isset(static::$_http_info_cache[__METHOD__])) {
+            return static::$_http_info_cache[__METHOD__];
         }
 
         $mobile_agents = Array('xiaomi', "240x320", "acer", "acoon", "acs-", "abacho", "ahong", "airness", "alcatel", "amoi", "android", "anywhereyougo.com", "applewebkit/525", "applewebkit/532", "asus", "audio", "au-mic", "avantogo", "becker", "benq", "bilbo", "bird", "blackberry", "blazer", "bleu", "cdm-", "compal", "coolpad", "danger", "dbtel", "dopod", "elaine", "eric", "etouch", "fly ", "fly_", "fly-", "go.web", "goodaccess", "gradiente", "grundig", "haier", "hedy", "hitachi", "htc", "huawei", "hutchison", "inno", "ipad", "ipaq", "ipod", "jbrowser", "kddi", "kgt", "kwc", "lenovo", "lg ", "lg2", "lg3", "lg4", "lg5", "lg7", "lg8", "lg9", "lg-", "lge-", "lge9", "longcos", "maemo", "mercator", "meridian", "micromax", "midp", "mini", "mitsu", "mmm", "mmp", "mobi", "mot-", "moto", "nec-", "netfront", "newgen", "nexian", "nf-browser", "nintendo", "nitro", "nokia", "nook", "novarra", "obigo", "palm", "panasonic", "pantech", "philips", "phone", "pg-", "playstation", "pocket", "pt-", "qc-", "qtek", "rover", "sagem", "sama", "samu", "sanyo", "samsung", "sch-", "scooter", "sec-", "sendo", "sgh-", "sharp", "siemens", "sie-", "softbank", "sony", "spice", "sprint", "spv", "symbian", "tablet", "talkabout", "tcl-", "teleca", "telit", "tianyu", "tim-", "toshiba", "tsm", "up.browser", "utec", "utstar", "verykool", "virgin", "vk-", "voda", "voxtel", "vx", "wap", "wellco", "wig browser", "wii", "windows ce", "wireless", "xda", "xde", "zte");
@@ -802,7 +875,7 @@ EOT;
             }
         }
 
-        self::$_http_info_cache[__METHOD__] = $is_mobile;
+        static::$_http_info_cache[__METHOD__] = $is_mobile;
         return $is_mobile;
     }
 

@@ -13,13 +13,19 @@ use Tiny\Func;
  */
 class FuncTest extends BaseNothingTest
 {
-    static $_class = '\Tiny\Func';
+    public static $_class = '';
 
     use PHPMock;
 
     ##########################
     ######## 数组处理 ########
     ##########################
+
+    public function __construct($name = '', array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        static::$_class = Func::_class();
+    }
 
     public function test_filter_keys()
     {
