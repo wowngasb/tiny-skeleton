@@ -504,38 +504,12 @@ class Func
         $checksum = crc32($salt . $_string . $keyb);
         $expiry_at = $_expiry > 0 ? $_expiry + time() : 0;
         $cryptkey = $keya . md5($salt . $keya . $keyc. 'merge key a and key c');// 参与运算的密匙
-        $key_length = strlen($cryptkey);
         // 加密，原数据补充附加信息，共 8byte  前 4 Byte 用来保存时间戳，后 4 Byte 用来保存 $checksum 解密时验证数据完整性
         // 解码，会从第 $keyc_length Byte开始，因为密文前 $keyc_length Byte保存 动态密匙
         $string = $operation == 'DECODE' ? static::safe_base64_decode(substr($_string, $keyc_length)) : pack('L', $expiry_at) . pack('L', $checksum) . $_string;
-        $string_length = strlen($string);
-
-        $result_list = [];
-        $box = range(0, 255);
-        $rndkey = [];
-        // 产生密匙簿
-        for ($i = 0; $i <= 255; $i++) {
-            $rndkey[$i] = ord($cryptkey[$i % $key_length]);
-        }
-        // 用固定的算法，打乱密匙簿，增加随机性，好像很复杂，实际上对并不会增加密文的强度
-        for ($j = $i = 0; $i < 256; $i++) {
-            $j = ($i + $j + $box[$i] + $box[$j] + $rndkey[$i] + $rndkey[$j]) % 256;
-            $tmp = $box[$i];
-            $box[$i] = $box[$j];
-            $box[$j] = $tmp;
-        }
-        // 核心加解密部分
-        for ($a = $j = $i = 0; $i < $string_length; $i++) {
-            $a = ($a + 1) % 256;
-            $j = ($j + $box[$a]) % 256;
-            $tmp = $box[$a];
-            $box[$a] = $box[$j];
-            $box[$j] = $tmp;
-            // 从密匙簿得出密匙进行异或，再转成字符
-            $result_list[] = chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256]));
-        }
-
-        $result = join('', $result_list);
+        
+        $result = static::encodeByXor($string, $cryptkey);
+        
         if ($operation == 'DECODE') {
             // 验证数据有效性
             $result_len_ = strlen($result);
@@ -550,6 +524,40 @@ class Func
         } else {
             return $keyc . static::safe_base64_encode($result);
         }
+    }
+
+    public static function encodeByXor($string, $cryptkey)
+    {
+        $string_length = strlen($string);
+        $key_length = strlen($cryptkey);
+        $result_list = [];
+        $box = range(0, 255);
+        $rndkey = [];
+        // 产生密匙簿
+        for ($i = 0; $i <= 255; $i++) {
+            $rndkey[$i] = ord($cryptkey[$i % $key_length]);
+        }
+        
+        for ($j = $i = 0; $i < 256; $i++) {
+            $j = ($i + $j + $box[$i] + $box[$j] + $rndkey[$i] + $rndkey[$j]) % 256;
+            $tmp = $box[$i];
+            $box[$i] = $box[$j];
+            $box[$j] = $tmp;
+        }
+        
+        // 核心加解密部分
+        for ($a = $j = $i = 0; $i < $string_length; $i++) {
+            $a = ($a + 1) % 256;
+            $j = ($j + $box[$a]) % 256;
+            $tmp = $box[$a];
+            $box[$a] = $box[$j];
+            $box[$j] = $tmp;
+            // 从密匙簿得出密匙进行异或，再转成字符
+            $result_list[] = chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256]));
+        }
+        
+        $result = join('', $result_list);
+        return $result;
     }
 
     /**
