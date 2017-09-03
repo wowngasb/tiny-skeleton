@@ -104,14 +104,12 @@ class ApiDispatch implements DispatchInterface
     {
 
         try {
+            /** @var AbstractApi $context */
             $result = call_user_func_array([$context, $action], $params);
-            AbstractBootstrap::debugConsole([
-                'class' => get_class($context),
-                'method' => $action,
-                'params' => $params,
-                'result' => $result
-            ], 'api');
+
             $callback = $context->_get('callback', '');
+            $context->doneApi($action, $params, $result, $callback);
+
             $json_str = !empty($callback) ? "{$callback}(" . json_encode($result) . ');' : json_encode($result);
             $context->getResponse()->addHeader('Content-Type: application/json;charset=utf-8', false)->appendBody($json_str);
         } catch (Error $ex1) {

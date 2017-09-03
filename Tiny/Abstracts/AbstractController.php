@@ -23,8 +23,6 @@ use Tiny\ViewInterface;
  */
 abstract class AbstractController extends AbstractContext
 {
-    use EventTrait, LogTrait, RpcTrait, CacheTrait;
-
     protected $_view = null;
 
     protected $routeInfo = [];  // 在路由完成后, 请求被分配到的路由信息 [$module, $controller, $action]

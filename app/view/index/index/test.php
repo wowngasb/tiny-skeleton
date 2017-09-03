@@ -49,9 +49,10 @@
 <script type="text/javascript">
     var ApiHub = require('static/api/ApiHub');
     $(function () {
-        ApiHub.hello(ApiHub.hello_args, function (res) {
+        ApiHub.hello({}, function (res) {
             $('#api-test').text(res.info);
         });
+        console.log('ApiHub.hello_args', ApiHub.hello_args);
     });
 </script><?= \Tiny\Plugin\Fis::scriptEnd(0) ?>
 

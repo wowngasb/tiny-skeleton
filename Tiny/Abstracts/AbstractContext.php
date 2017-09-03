@@ -10,6 +10,10 @@ namespace Tiny\Abstracts;
 
 use Tiny\Request;
 use Tiny\Response;
+use Tiny\Traits\CacheTrait;
+use Tiny\Traits\EventTrait;
+use Tiny\Traits\LogTrait;
+use Tiny\Traits\RpcTrait;
 
 
 /**
@@ -19,6 +23,8 @@ use Tiny\Response;
  */
 abstract class AbstractContext
 {
+    use EventTrait, LogTrait, RpcTrait, CacheTrait;
+
     protected $request = null;
 
     protected $response = null;

@@ -9,8 +9,12 @@
 namespace Tiny\OrmQuery;
 
 
+use Tiny\Traits\EventTrait;
+
 class OrmConfig
 {
+    use EventTrait;
+
     public $method = '';
     
     public $table_name = '';     //数据表名
@@ -18,6 +22,7 @@ class OrmConfig
     public $max_select = 0;  //最多获取 5000 条记录 防止数据库拉取条目过多
     public $db_name = '';       //数据库名
     public $cache_time = 0;     //数据缓存时间
+    public $debug = false;
 
     /**
      * OrmConfig constructor.
@@ -50,4 +55,21 @@ class OrmConfig
         }
         return "{$this->method}?" . join($args_list, '&');
     }
+
+    public function doneSql($sql_str, $time, $_tag)
+    {
+        static::fire('runSql', [$this, $sql_str, $time, $_tag]);
+    }
+
+    /**
+     *  注册回调函数  回调参数为 callback($this, $sql_str, $time, $_tag)
+     *  1、runSql    执行sql之后触发
+     * @param string $event
+     * @return bool
+     */
+    public static function isAllowedEvent($event){
+        static $allow_event = ['runSql',];
+        return in_array($event, $allow_event);
+    }
+
 }

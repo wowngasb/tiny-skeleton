@@ -9,8 +9,6 @@ use Tiny\Traits\RpcTrait;
 abstract class AbstractApi extends AbstractContext
 {
 
-    use LogTrait, RpcTrait, CacheTrait;
-
     protected static $_API_LIMIT_KET = 'BaseApiRateLimit';
 
     /**
@@ -77,6 +75,22 @@ abstract class AbstractApi extends AbstractContext
             'TimeRange' => $range_sec,
             'TimeReset' => gmdate('D, d M Y H:i:s T', ($time_count + 1) * $range_sec),
         ];
+    }
+
+    /**
+     *  注册回调函数  回调参数为 callback($this, $action, $params, $result, $callback)
+     *  1、apiResult    api执行完毕返回结果时触发
+     * @param string $event
+     * @return bool
+     */
+    protected static function isAllowedEvent($event)
+    {
+        static $allow_event = ['apiResult', ];
+        return in_array($event, $allow_event);
+    }
+
+    public function doneApi($action, $params, $result, $callback){
+        static::fire('apiResult', [$this, $action, $params, $result, $callback]);
     }
 
 }

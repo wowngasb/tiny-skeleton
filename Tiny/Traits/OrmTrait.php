@@ -253,16 +253,14 @@ trait OrmTrait
         return self::$_db;
     }
 
-    protected static function debugSql($time, $sql, $param, $tag = 'sql')
+    protected static function recordRunSql($time, $sql, $param, $tag = 'sql')
     {
         $db_name = static::getOrmConfig()->db_name;
         $table_name = static::getOrmConfig()->table_name;
 
         $sql_str = static::showQuery($sql, $param);
-        $use_str = round($time * 1000, 2) . 'ms';
-        self::debug("SQL({$use_str}) {$sql_str}", $tag, __CLASS__, __LINE__);
-        $_tag = str_replace(__TRAIT__, "SQL >> {$db_name}.{$table_name}({$use_str})", $tag);
-        AbstractBootstrap::debugConsole($sql_str, $_tag);
+        $_tag = str_replace(__TRAIT__, "{$db_name}.{$table_name}", $tag);
+        static::getOrmConfig()->doneSql($sql_str, $time, $_tag);
     }
 
     protected static function showQuery($query, $params)
@@ -302,7 +300,7 @@ trait OrmTrait
         $start_time = microtime(true);
         $table = static::tableItem($where);
         $count = $table->count($columns);
-        static::debugSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
+        static::recordRunSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
         return $count;
     }
 
@@ -334,7 +332,7 @@ trait OrmTrait
             $table->orderBy($sort_option['field'], $sort_option['direction']);
         }
         $data = $table->get($columns);
-        static::debugSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
+        static::recordRunSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
 
         $rst = [];
         foreach ($data as $key => $val) {
@@ -358,7 +356,7 @@ trait OrmTrait
         $table = static::tableItem($where);
         $table->take($max_select);
         $data = $table->get($columns);
-        static::debugSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
+        static::recordRunSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
 
         $rst = [];
         foreach ($data as $key => $val) {
@@ -394,7 +392,7 @@ trait OrmTrait
         $start_time = microtime(true);
         $table = static::tableItem($where);
         $item = $table->first($columns);
-        static::debugSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
+        static::recordRunSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
         return static::_fixItem((array)$item);
     }
 
@@ -418,7 +416,7 @@ trait OrmTrait
         }
         $table = static::tableItem();
         $id = $table->insertGetId($data, $primary_key);
-        static::debugSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
+        static::recordRunSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
         return $id;
     }
 
@@ -435,7 +433,7 @@ trait OrmTrait
         unset($data[$primary_key]);
         $table = static::tableItem()->where($primary_key, $id);
         $update = $table->update($data);
-        static::debugSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
+        static::recordRunSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
         return $update;
     }
 
@@ -450,7 +448,7 @@ trait OrmTrait
         $primary_key = static::getOrmConfig()->primary_key;
         $table = static::tableItem()->where($primary_key, $id);
         $delete = $table->delete();
-        static::debugSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
+        static::recordRunSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
         return $delete;
     }
 
@@ -467,7 +465,7 @@ trait OrmTrait
         $primary_key = static::getOrmConfig()->primary_key;
         $table = static::tableItem()->where($primary_key, $id);
         $increment = $table->increment($filed, $value);
-        static::debugSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
+        static::recordRunSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
         return $increment;
     }
 
@@ -484,7 +482,7 @@ trait OrmTrait
         $primary_key = static::getOrmConfig()->primary_key;
         $table = static::tableItem()->where($primary_key, $id);
         $decrement = $table->decrement($filed, $value);
-        static::debugSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
+        static::recordRunSql(microtime(true) - $start_time, $table->toSql(), $table->getBindings(), __METHOD__);
         return $decrement;
     }
 

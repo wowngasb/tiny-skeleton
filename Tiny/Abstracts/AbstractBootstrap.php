@@ -11,6 +11,7 @@ namespace Tiny\Abstracts;
 
 use PhpConsole\Connector;
 use Tiny\Application;
+use Tiny\OrmQuery\OrmConfig;
 use Tiny\Request;
 use Tiny\Response;
 
@@ -65,17 +66,17 @@ abstract class AbstractBootstrap
 
         Application::on('routerStartup', function (Application $obj, Request $request, Response $response) {
             false && func_get_args();
-            $data = ['request' => $request,];
+            $data = ['_request' => $request, 'request' => $request->_request()];
             self::debugConsole($data, get_class($obj) . ' #routerStartup', 1);
         });
-        Application::on('routerShutdown', function (Application $obj, Request $request, Response $response) {
+        /* Application::on('routerShutdown', function (Application $obj, Request $request, Response $response) {
             false && func_get_args();
-            $data = ['route' => $request->getCurrentRoute(), 'routeInfo' => $request->strRouteInfo(), 'params' => $request->getParams()];
+            $data = ['route' => $request->getCurrentRoute(), 'routeInfo' => $request->strRouteInfo(), 'request' => $request->_request()];
             self::debugConsole($data, get_class($obj) . ' #routerShutdown', 1);
-        });
+        }); */
         Application::on('dispatchLoopStartup', function (Application $obj, Request $request, Response $response) {
             false && func_get_args();
-            $data = ['route' => $request->getCurrentRoute(), 'routeInfo' => $request->strRouteInfo(), 'params' => $request->getParams()];
+            $data = ['route' => $request->getCurrentRoute(), 'routeInfo' => $request->strRouteInfo(), 'request' => $request->_request()];
             if ($request->isSessionStarted()) {
                 $data['session'] = $request->_session();
             }
@@ -89,7 +90,7 @@ abstract class AbstractBootstrap
         }); */
         Application::on('preDispatch', function (Application $obj, Request $request, Response $response) {
             false && func_get_args();
-            $data = ['route' => $request->getCurrentRoute(), 'routeInfo' => $request->strRouteInfo(), 'params' => $request->getParams()];
+            $data = ['route' => $request->getCurrentRoute(), 'routeInfo' => $request->strRouteInfo(), 'params' => $request->getParams(), 'request' => $request->_request(), 'session' => $request->_session(), 'cookie' => $request->_cookie()];
             self::debugConsole($data, get_class($obj) . ' #preDispatch', 1);
         });
         /*
@@ -109,6 +110,23 @@ abstract class AbstractBootstrap
             $data = ['params' => $params, 'tpl_path' => $tpl_path];
             self::debugConsole($data, get_class($obj) . ' #preWidget', 1);
         });  // 注册 组件渲染 打印组件变量  用于调试
+
+        OrmConfig::on('runSql', function (OrmConfig $obj, $sql_str, $time, $_tag) {
+            false && func_get_args();
+            if ($obj->debug) {
+                $use_str = round($time * 1000, 2) . 'ms';
+                AbstractBootstrap::debugConsole($sql_str, ' >>> ' . $_tag . " ({$use_str})");
+            }
+        });  // 注册 SQl执行 打印相关信息  用于调试
+
+        AbstractApi::on('apiResult', function ($obj, $action, $params, $result, $callback) {
+            AbstractBootstrap::debugConsole([
+                'method' => $action,
+                'params' => $params,
+                'result' => $result,
+                'callback' => $callback,
+            ], get_class($obj) . ' #api');
+        });
     }
 
 }
