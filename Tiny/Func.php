@@ -508,10 +508,6 @@ class Func
         return $byte3 * 256 * 256 * 256 + $byte2 * 256 * 256 + $byte1 * 256 + $byte0;
     }
 
-    public static function ucrc32($data){
-        return intval(sprintf('%u', crc32($data)));
-    }
-
     /**
      * @param string $_string
      * @param string $operation
@@ -530,12 +526,12 @@ class Func
         $keya = md5($salt . substr($key, 0, 16) . 'key a for crypt');// 密匙a会参与加解密
         $keyb = md5($salt . substr($key, 16, 16) . 'key b for check sum');// 密匙b会用来做数据完整性验证
         $keyc = $keyc_length ? ($operation == 'DECODE' ? substr($_string, 0, $keyc_length) : static::rand_str($keyc_length)) : '';// 密匙c用于变化生成的密文
-        $checksum = static::ucrc32($salt . $_string . $keyb);
+        $checksum = substr(md5($salt . $_string . $keyb), 0, 8);
         $expiry_at = $_expiry > 0 ? $_expiry + time() : 0;
         $cryptkey = $keya . md5($salt . $keya . $keyc. 'merge key a and key c');// 参与运算的密匙
         // 加密，原数据补充附加信息，共 8byte  前 4 Byte 用来保存时间戳，后 4 Byte 用来保存 $checksum 解密时验证数据完整性
         // 解码，会从第 $keyc_length Byte开始，因为密文前 $keyc_length Byte保存 动态密匙
-        $string = $operation == 'DECODE' ? static::safe_base64_decode(substr($_string, $keyc_length)) : static::int32ToByteWithLittleEndian($expiry_at) . static::int32ToByteWithLittleEndian( $checksum) . $_string;
+        $string = $operation == 'DECODE' ? static::safe_base64_decode(substr($_string, $keyc_length)) : static::int32ToByteWithLittleEndian($expiry_at) . hex2bin( $checksum) . $_string;
         
         $result = static::encodeByXor($string, $cryptkey);
         
@@ -543,9 +539,9 @@ class Func
             // 验证数据有效性
             $result_len_ = strlen($result);
             $expiry_at_ = $result_len_ >= 4 ? static::byteToInt32WithLittleEndian(substr($result, 0, 4)) : 0;
-            $checksum_ = $result_len_ >= 8 ? static::byteToInt32WithLittleEndian(substr($result, 4, 4)) : 0;
+            $checksum_ = $result_len_ >= 8 ? bin2hex(substr($result, 4, 4)) : 0;
             $string_ = $result_len_ >= 8 ? substr($result, 8) : '';
-            $tmp_sum = static::ucrc32($salt . $string_ . $keyb);
+            $tmp_sum = substr(md5($salt . $string_ . $keyb), 0, 8);
             if (($expiry_at_ == 0 || $expiry_at_ > time()) && $checksum_ == $tmp_sum ) {
                 return $string_;
             } else {

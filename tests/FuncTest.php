@@ -629,21 +629,20 @@ class FuncTest extends BaseNothingTest
         $key = 'zT5hF$E24*(#dfS^Yq3&6A^6';
         $test_i = 'abc';
         $rst = Func::encode($test_i, $key, 10);
-        /* echo "\n".Func::encode('', $key, 10)."\n";
-        echo "\n".Func::encode('1', $key, 10)."\n";
-        echo "\n".Func::encode('12', $key, 10)."\n";
-        echo "\n".Func::encode('123', $key, 10)."\n";
-        echo "\n".Func::encode('1234', $key, 10)."\n";
-        echo "\n".Func::encode('12345', $key, 10)."\n";
-        echo "\n".Func::encode('123456', $key, 10)."\n";
-        echo "\n".Func::encode('1234567', $key, 10)."\n";
-        echo "\n".Func::encode('12345678', $key, 10)."\n";
-        echo "\n".Func::encode('12345678', $key, 10)."\n";
-        echo "\n".Func::encode('12345678', $key, 10)."\n";
-        echo "\n".Func::encode('12345678', $key, 10)."\n"; */
-        
         $test_o = Func::decode($rst, $key);
         PHPUnit_Framework_Assert::assertEquals($test_i, $test_o);
+
+        /* $tmp = [
+            'key' => $key,
+            'test_list' => [],
+        ];
+        foreach ([
+                     '', '1', '12', '123', '1234','1234','1234','1234','1234',
+                 ] as $test) {
+            $v = Func::encode($test, $key);
+            $tmp['test_list'][$v] = $test;
+        }
+        echo "\n" . json_encode($tmp). "\n"; */
     }
 
     public function test_authcode()
