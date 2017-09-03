@@ -66,7 +66,7 @@ class ApiHub extends AbstractApi
      * @param int $b
      * @return array
      */
-    public function testSum123($a, $b)
+    public function testSum($a, $b)
     {
         $sum = $a + $b;
         $msg = "test log a={$a} b={$b}, sum={$sum}";

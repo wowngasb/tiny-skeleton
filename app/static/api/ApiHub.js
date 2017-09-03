@@ -1,6 +1,6 @@
 /*!
  * ApiHub.js
- * build at 2017-09-03 21:05:03
+ * build at 2017-09-04 00:18:58
  */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -88,15 +88,15 @@ function ApiHubHelper(){
      * @param int $b
      * @return array
      */
-    this.testSum123 = function(args, success, error) {
+    this.testSum = function(args, success, error) {
         args = args || {};
         var log = function(tag, use_time, args, data){
             var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
-            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.testSum123('+use_time+'ms)', 'args:', args, 'data:', data);
+            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.testSum('+use_time+'ms)', 'args:', args, 'data:', data);
         };
-        return _rfcApi('POST', '/api/ApiHub/testSum123' ,args, success, error, log);
+        return _rfcApi('POST', '/api/ApiHub/testSum' ,args, success, error, log);
     };
-    this.testSum123_args = {"a":"?","b":"?"};
+    this.testSum_args = {"a":"?","b":"?"};
 
     
     this.doneApi = function(args, success, error) {

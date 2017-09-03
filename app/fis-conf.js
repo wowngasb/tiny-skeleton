@@ -1,5 +1,6 @@
 //模块化方案，本项目选中CommonJS方案(同样支持异步加载哈)
-http = require('http');
+var http = require('http');
+var nodekl = require('nodekl');
 
 fis.hook('module', {
     mode: 'commonjs'
@@ -77,13 +78,16 @@ fis.match('*', {
                     break;
                 }
             }
-            try_build_api && !(function(){
+            var dev_token = nodekl.encode('dev', 'key');
+            try_build_api && dev_token && !(function(){
                 console.log('\nbuild api js');
-                http.get("http://tiny.app/develop/deploy/buildapimodjs?dev_debug=1&dev_token=aK_4BGVgL-YO4zcW4", function(res) {
-                    console.log("Build API js response: " + res.statusCode);
-                }).on('error', function(e) {
-                    console.log("Build API js error: " + e.message);
-                });
+                setTimeout(function (){
+                    http.get("http://tiny.app/develop/deploy/buildapimodjs?dev_debug=1&dev_token=" + dev_token, function(res) {
+                        console.log("Build API js response: " + res.statusCode);
+                    }).on('error', function(e) {
+                        console.log("Build API js error: " + e.message);
+                    });
+                }, 1000);
             })();
             next && next(); //由于是异步的如果后续还需要执行必须调用 next
         },
@@ -124,9 +128,3 @@ fis.media('product').match('*.png', {
 fis.media('product').match('*.{js, css, png, jpg, gif, svg}', {
     useHash: true
 });
-
-
-
-
-
-
