@@ -589,7 +589,7 @@ class FuncTest extends BaseNothingTest
         $rst = Func::encode($test_i, $key, 10 * 365 * 24 * 3600);   //设置有效期为 10 年
 
         $time = $this->getFunctionMock(Func::_namespace(), "time");  // Mock Func 命名空间下 time 函数
-        $time->expects($this->once())->willReturn($now + 10 * 365 * 24 * 3600 - 10);    //模拟 10年 - 10秒后的时间
+        $time->expects($this->once())->willReturn($now + 10 * 365 * 24 * 3600 - 100);    //模拟 10年 - 10秒后的时间
 
         $test_o = Func::decode($rst, $key);
         PHPUnit_Framework_Assert::assertEquals($test_i, $test_o);
@@ -603,7 +603,7 @@ class FuncTest extends BaseNothingTest
         $rst = Func::encode($test_i, $key, 10 * 365 * 24 * 3600);   //设置有效期为 10 年
 
         $time = $this->getFunctionMock(Func::_namespace(), "time");  // Mock Func 命名空间下 time 函数
-        $time->expects($this->once())->willReturn($now + 10 * 365 * 24 * 3600 + 10);    //模拟 10年 + 10秒后的时间
+        $time->expects($this->once())->willReturn($now + 10 * 365 * 24 * 3600 + 100);    //模拟 10年 + 10秒后的时间
 
         $test_o = Func::decode($rst, $key);
         PHPUnit_Framework_Assert::assertEmpty($test_o);
@@ -614,13 +614,14 @@ class FuncTest extends BaseNothingTest
         $key = 'zT5hF$E24*(#dfS^Yq3&6A^6';
         $test_i = 'abc';
         $now = time();
+
         $rst = Func::encode($test_i, $key, 10);   //设置有效期为 10 s
 
         $time = $this->getFunctionMock(Func::_namespace(), "time");  // Mock Func 命名空间下 time 函数
-        $time->expects($this->once())->willReturn($now + 20);    //模拟 20秒后的时间
+        $time->expects($this->once())->willReturn($now + 100);
 
         $test_o = Func::decode($rst, $key);
-        PHPUnit_Framework_Assert::assertEmpty($test_o);
+        PHPUnit_Framework_Assert::assertEquals($test_o, '');
     }
 
     public function test_authcode_expiry1()

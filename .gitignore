@@ -25,3 +25,6 @@ markdown/
 
 /public/phpinfo.php
 /public/robots.txt
+
+/test.php
+/phpinfo.php

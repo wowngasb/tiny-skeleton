@@ -1,7 +1,9 @@
 <?php
-require_once(dirname(__DIR__) . '/vendor/autoload.php');
+use app\Bootstrap;
 
-\app\Bootstrap::bootstrap(
+require(dirname(__DIR__) . "/config/app-config.ignore.php");
+
+Bootstrap::bootstrap(
     'app',
     new \Tiny\Application(require(dirname(__DIR__) . "/config/app-config.ignore.php"))
 )->run();
