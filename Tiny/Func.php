@@ -514,24 +514,26 @@ class Func
      * @param string $_key
      * @param int $_expiry
      * @param string $salt
-     * @param int $keyc_length 动态密匙长度，相同的明文会生成不同密文就是依靠动态密匙
+     * @param int $rnd_length 动态密匙长度 byte $rnd_length>=0，相同的明文会生成不同密文就是依靠动态密匙
+     * @param int $chk_length  校验和长度 byte $rnd_length>=4 && $rnd_length><=16，相同的明文会生成不同密文就是依靠动态密匙
      * @return string
-     * @internal param string $string
-     * @internal param string $key
-     * @internal param int $expiry
      */
-    public static function authcode($_string, $operation, $_key, $_expiry = 0, $salt = '', $keyc_length = 2)
+    public static function authcode($_string, $operation, $_key, $_expiry = 0, $salt = '', $rnd_length = 2, $chk_length = 4)
     {
+        $rnd_length = $rnd_length > 0 ? intval($rnd_length) : 0;
+        $_expiry = $_expiry > 0 ? intval($_expiry) : 0;
+        $chk_length = $chk_length > 4 ? ($chk_length < 16 ? intval($chk_length) : 16) : 4;
+
         $key = md5($salt . $_key . 'origin key');// 密匙
         $keya = md5($salt . substr($key, 0, 16) . 'key a for crypt');// 密匙a会参与加解密
         $keyb = md5($salt . substr($key, 16, 16) . 'key b for check sum');// 密匙b会用来做数据完整性验证
-        $keyc = $keyc_length ? ($operation == 'DECODE' ? substr($_string, 0, $keyc_length) : static::rand_str($keyc_length)) : '';// 密匙c用于变化生成的密文
-        $checksum = substr(md5($salt . $_string . $keyb), 0, 8);
+        $keyc = $rnd_length > 0 ? ($operation == 'DECODE' ? substr($_string, 0, $rnd_length) : static::rand_str($rnd_length)) : '';// 密匙c用于变化生成的密文
+        $checksum = substr(md5($salt . $_string . $keyb), 0, 2 * $chk_length);
         $expiry_at = $_expiry > 0 ? $_expiry + time() : 0;
         $cryptkey = $keya . md5($salt . $keya . $keyc. 'merge key a and key c');// 参与运算的密匙
         // 加密，原数据补充附加信息，共 8byte  前 4 Byte 用来保存时间戳，后 4 Byte 用来保存 $checksum 解密时验证数据完整性
         // 解码，会从第 $keyc_length Byte开始，因为密文前 $keyc_length Byte保存 动态密匙
-        $string = $operation == 'DECODE' ? static::safe_base64_decode(substr($_string, $keyc_length)) : static::int32ToByteWithLittleEndian($expiry_at) . hex2bin( $checksum) . $_string;
+        $string = $operation == 'DECODE' ? static::safe_base64_decode(substr($_string, $rnd_length)) : static::int32ToByteWithLittleEndian($expiry_at) . hex2bin( $checksum) . $_string;
         
         $result = static::encodeByXor($string, $cryptkey);
         
@@ -539,9 +541,10 @@ class Func
             // 验证数据有效性
             $result_len_ = strlen($result);
             $expiry_at_ = $result_len_ >= 4 ? static::byteToInt32WithLittleEndian(substr($result, 0, 4)) : 0;
-            $checksum_ = $result_len_ >= 8 ? bin2hex(substr($result, 4, 4)) : 0;
-            $string_ = $result_len_ >= 8 ? substr($result, 8) : '';
-            $tmp_sum = substr(md5($salt . $string_ . $keyb), 0, 8);
+            $pre_len = 4 + $chk_length;
+            $checksum_ = $result_len_ >= $pre_len ? bin2hex(substr($result, 4, $chk_length)) : 0;
+            $string_ = $result_len_ >= $pre_len ? substr($result, $pre_len) : '';
+            $tmp_sum = substr(md5($salt . $string_ . $keyb), 0, 2 * $chk_length);
             if (($expiry_at_ == 0 || $expiry_at_ > time()) && $checksum_ == $tmp_sum ) {
                 return $string_;
             } else {
