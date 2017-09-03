@@ -80,9 +80,9 @@ fis.match('*', {
             try_build_api && !(function(){
                 console.log('\nbuild api js');
                 http.get("http://tiny.app/develop/deploy/buildapimodjs?dev_debug=1&dev_token=aK_4BGVgL-YO4zcW4", function(res) {
-                    console.log("Got response: " + res.statusCode);
+                    console.log("Build API js response: " + res.statusCode);
                 }).on('error', function(e) {
-                    console.log("Got error: " + e.message);
+                    console.log("Build API js error: " + e.message);
                 });
             })();
             next && next(); //由于是异步的如果后续还需要执行必须调用 next
@@ -124,6 +124,9 @@ fis.media('product').match('*.png', {
 fis.media('product').match('*.{js, css, png, jpg, gif, svg}', {
     useHash: true
 });
+
+
+
 
 
 
