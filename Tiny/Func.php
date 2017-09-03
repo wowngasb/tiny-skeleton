@@ -515,7 +515,7 @@ class Func
      * @param int $_expiry
      * @param string $salt
      * @param int $rnd_length 动态密匙长度 byte $rnd_length>=0，相同的明文会生成不同密文就是依靠动态密匙
-     * @param int $chk_length  校验和长度 byte $rnd_length>=4 && $rnd_length><=16，相同的明文会生成不同密文就是依靠动态密匙
+     * @param int $chk_length  校验和长度 byte $rnd_length>=4 && $rnd_length><=16
      * @return string
      */
     public static function authcode($_string, $operation, $_key, $_expiry = 0, $salt = '', $rnd_length = 2, $chk_length = 4)
