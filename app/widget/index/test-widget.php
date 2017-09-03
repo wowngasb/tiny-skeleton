@@ -28,7 +28,7 @@
 <script type="text/javascript">
     $(function () {
         var xxx = require('static/api/ApiHub');
-        xxx.hello({name: $('#widget-test').text()}, function (res) {
+        xxx.hello({name: '   ' + $('#widget-test').text() + '     '}, function (res) {
             $('#widget-test').text( res.info );
         });
     });

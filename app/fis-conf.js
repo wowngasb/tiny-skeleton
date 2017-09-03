@@ -1,4 +1,6 @@
 //模块化方案，本项目选中CommonJS方案(同样支持异步加载哈)
+http = require('http');
+
 fis.hook('module', {
     mode: 'commonjs'
 });
@@ -76,7 +78,12 @@ fis.match('*', {
                 }
             }
             try_build_api && !(function(){
-                console.log('build api js');
+                console.log('\nbuild api js');
+                http.get("http://tiny.app/develop/deploy/buildapimodjs?dev_debug=1&dev_token=aK_4BGVgL-YO4zcW4", function(res) {
+                    console.log("Got response: " + res.statusCode);
+                }).on('error', function(e) {
+                    console.log("Got error: " + e.message);
+                });
             })();
             next && next(); //由于是异步的如果后续还需要执行必须调用 next
         },
@@ -117,4 +124,6 @@ fis.media('product').match('*.png', {
 fis.media('product').match('*.{js, css, png, jpg, gif, svg}', {
     useHash: true
 });
+
+
 

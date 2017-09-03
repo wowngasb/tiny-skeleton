@@ -10,9 +10,13 @@ namespace Tiny\View;
 
 
 use Tiny\Plugin\Fis;
+use Tiny\ViewInterface;
 
-class ViewFis extends ViewSimple
+class ViewFis extends ViewSimple implements ViewInterface
 {
+
+    private static $pre_display = null;
+    private static $pre_widget = null;
 
     public static function setFis($config_dir, $template_dir)
     {
@@ -27,10 +31,10 @@ class ViewFis extends ViewSimple
      */
     public static function widget($widget_path, array $tpl_vars = [])
     {
+        $tpl_vars = self::$pre_widget ? call_user_func_array(self::$pre_widget, [$widget_path, $tpl_vars]) : $tpl_vars;
         ob_start();
         ob_implicit_flush(false);
         Fis::widget($widget_path, $tpl_vars);
-
         return ob_get_clean();
     }
 
@@ -41,7 +45,29 @@ class ViewFis extends ViewSimple
      */
     public static function display($view_path, array $tpl_vars = [])
     {
+        $tpl_vars = self::$pre_display ? call_user_func_array(self::$pre_display, [$view_path, $tpl_vars]) : $tpl_vars;
         Fis::display($view_path, $tpl_vars);
+    }
+
+
+    /**
+     * 用于添加 display 前的预处理函数  主要用于 添加通用变量 触发事件
+     * @param callable $pre_display 参数为 pre_display($view_path, array $tpl_vars = [])
+     * @return mixed
+     */
+    public static function preTreatmentDisplay(callable $pre_display)
+    {
+        self::$pre_display = $pre_display;
+    }
+
+    /**
+     * 用于添加 widget 前的预处理函数  主要用于 添加通用变量 触发事件
+     * @param callable $pre_widget 参数为  pre_widget($widget_path, array $tpl_vars = [])
+     * @return mixed
+     */
+    public static function preTreatmentWidget(callable $pre_widget)
+    {
+        self::$pre_widget = $pre_widget;
     }
 
 }

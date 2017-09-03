@@ -41,7 +41,7 @@
 </style>
 <?= \Tiny\Plugin\Fis::styleEnd() ?>
 <hr/>
-<?= \Tiny\View\ViewFis::widget('widget/index/test-widget.php', array_merge($tpl_vars, ['list' => ['item 1', 'item 2', 'item 3'], 'title' => 'TEST'])) ?>
+<?= \Tiny\View\ViewFis::widget('widget/index/test-widget.php', ['list' => ['item 1', 'item 2', 'item 3'], 'title' => 'TEST']) ?>
 </body>
 <?= \Tiny\Plugin\Fis::import('static/jquery/jquery-1.7.2.min.js', false) ?>
 
@@ -54,6 +54,9 @@
         });
         console.log('ApiHub.hello_args', ApiHub.hello_args);
     });
+    setTimeout(function(){
+        ApiHub.testError({id:'abc'});
+    }, 2000);
 </script><?= \Tiny\Plugin\Fis::scriptEnd(0) ?>
 
 <!-- js输出位置，放在底部加快页面解析 -->

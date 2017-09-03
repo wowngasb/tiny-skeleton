@@ -78,19 +78,24 @@ abstract class AbstractApi extends AbstractContext
     }
 
     /**
-     *  注册回调函数  回调参数为 callback($this, $action, $params, $result, $callback)
+     *  注册回调函数  回调参数为 callback($this, $action, $params, $result or $ex, $callback)
      *  1、apiResult    api执行完毕返回结果时触发
+     *  2、apiException    api执行发生异常时触发
      * @param string $event
      * @return bool
      */
     protected static function isAllowedEvent($event)
     {
-        static $allow_event = ['apiResult', ];
+        static $allow_event = ['apiResult', 'apiException'];
         return in_array($event, $allow_event);
     }
 
     public function doneApi($action, $params, $result, $callback){
         static::fire('apiResult', [$this, $action, $params, $result, $callback]);
+    }
+
+    public function exceptApi($action, $params, $ex, $callback){
+        static::fire('apiException', [$this, $action, $params, $ex, $callback]);
     }
 
 }

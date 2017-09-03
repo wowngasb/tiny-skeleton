@@ -9,7 +9,7 @@
 namespace Tiny;
 
 
-class Func
+abstract class Func
 {
 
     public static function _class()

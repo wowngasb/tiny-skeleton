@@ -24,6 +24,22 @@ class ControllerSimple extends AbstractController
     {
         parent::__construct($request, $response);
         $this->setView(new ViewSimple());
+
+        ViewSimple::preTreatmentDisplay(function ($file_path, $params) {
+            $params['routeInfo'] = $this->routeInfo;
+            $params['appname'] = $this->appname;
+            $params['request'] = $this->request;
+            static::fire('preDisplay', [$this, $file_path, $params]);
+            return $params;
+        });
+
+        ViewSimple::preTreatmentWidget(function ($file_path, $params) {
+            $params['routeInfo'] = $this->routeInfo;
+            $params['appname'] = $this->appname;
+            $params['request'] = $this->request;
+            static::fire('preWidget', [$this, $file_path, $params]);
+            return $params;
+        });
     }
 
     public function setTemplatePath($view_dir, $widget_dir)
@@ -48,28 +64,21 @@ class ControllerSimple extends AbstractController
 
         $view = $this->getView();
         $params = $view->getAssign();
-        $params['routeInfo'] = $this->routeInfo;
-        $params['appname'] = $this->appname;
-        $params['request'] = $this->request;
 
         if (!empty($this->_layout_tpl)) {
             $layout_tpl = Func::stri_endwith($this->_layout_tpl, '.php') ? $this->_layout_tpl : "{$this->_layout_tpl}.php";
             $layout_path = Func::joinNotEmpty(DIRECTORY_SEPARATOR, [$this->_view_dir, $this->routeInfo[0], $layout_tpl]);
             if (is_file($layout_path)) {
-                static::fire('preDisplay', [$this, $file_path, $params]);
                 ob_start();
                 ob_implicit_flush(false);
                 $view->display($file_path, $params);
                 $action_content = ob_get_clean();
-
                 $params['action_content'] = $action_content;
-
-                static::fire('preDisplay', [$this, $layout_path, $params]);
                 $view->display($layout_path, $params);
                 return;
             }
         }
-        static::fire('preDisplay', [$this, $file_path, $params]);
+
         $view->display($file_path, $params);
     }
 
@@ -86,14 +95,7 @@ class ControllerSimple extends AbstractController
             return '';
         }
         $tpl_path = Func::stri_endwith($tpl_path, '.php') ? $tpl_path : "{$tpl_path}.php";
-
-        $params['routeInfo'] = $this->routeInfo;
-        $params['appname'] = $this->appname;
-        $params['request'] = $this->request;
-
         $file_path = Func::joinNotEmpty(DIRECTORY_SEPARATOR, [$this->_widget_dir, $tpl_path]);
-
-        static::fire('preWidget', [$this, $file_path, $params]);
         $buffer = $this->getView()->widget($file_path, $params);
         return $buffer;
     }

@@ -1,6 +1,6 @@
 /*!
  * ApiHub.js
- * build at 2017-09-02 02:55:02 123 234
+ * build at 2017-09-03 20:30:50
  */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -71,6 +71,17 @@ function ApiHubHelper(){
     };
     this.hello_args = {"name":"world"};
 
+    
+    this.testError = function(args, success, error) {
+        args = args || {};
+        var log = function(tag, use_time, args, data){
+            var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
+            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.testError('+use_time+'ms)', 'args:', args, 'data:', data);
+        };
+        return _rfcApi('POST', '/api/ApiHub/testError' ,args, success, error, log);
+    };
+    this.testError_args = {"id":"?"};
+
     /**
      * test sum
      * @param int $a
@@ -86,6 +97,39 @@ function ApiHubHelper(){
         return _rfcApi('POST', '/api/ApiHub/testSum' ,args, success, error, log);
     };
     this.testSum_args = {"a":"?","b":"?"};
+
+    
+    this.doneApi = function(args, success, error) {
+        args = args || {};
+        var log = function(tag, use_time, args, data){
+            var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
+            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.doneApi('+use_time+'ms)', 'args:', args, 'data:', data);
+        };
+        return _rfcApi('POST', '/api/ApiHub/doneApi' ,args, success, error, log);
+    };
+    this.doneApi_args = {"action":"?","params":"?","result":"?","callback":"?"};
+
+    
+    this.exceptApi = function(args, success, error) {
+        args = args || {};
+        var log = function(tag, use_time, args, data){
+            var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
+            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.exceptApi('+use_time+'ms)', 'args:', args, 'data:', data);
+        };
+        return _rfcApi('POST', '/api/ApiHub/exceptApi' ,args, success, error, log);
+    };
+    this.exceptApi_args = {"action":"?","params":"?","ex":"?","callback":"?"};
+
+    
+    this.on = function(args, success, error) {
+        args = args || {};
+        var log = function(tag, use_time, args, data){
+            var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
+            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.on('+use_time+'ms)', 'args:', args, 'data:', data);
+        };
+        return _rfcApi('POST', '/api/ApiHub/on' ,args, success, error, log);
+    };
+    this.on_args = {"event":"?","callback":"?"};
 }
 
 /*  */

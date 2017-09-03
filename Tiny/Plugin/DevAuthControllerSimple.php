@@ -57,6 +57,15 @@ EOT;
         return $develop_key;
     }
 
+    protected function _checkRequestDevelopKeyToken(){
+        $dev_token = $this->_request('dev_token', '');
+        if(!empty($dev_token)){
+            $crypt_key = Application::app()->getEnv('ENV_CRYPT_KEY');
+            $develop_key = Func::decode($dev_token, $crypt_key);
+            $develop_key && $this->_setCookieDevelopKey($develop_key);
+        }
+    }
+
     protected function _setCookieDevelopKey($develop_key)
     {
         $name = self::$_SVR_DEVELOP_KEY;

@@ -127,6 +127,15 @@ abstract class AbstractBootstrap
                 'callback' => $callback,
             ], get_class($obj) . ' #api');
         });
+
+        AbstractApi::on('apiException', function ($obj, $action, $params, $ex, $callback) {
+            AbstractBootstrap::debugConsole([
+                'method' => $action,
+                'params' => $params,
+                'exception' => $ex,
+                'callback' => $callback,
+            ], get_class($obj) . ' #exception');
+        });
     }
 
 }

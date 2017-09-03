@@ -10,6 +10,7 @@ namespace app\api;
 
 
 use Tiny\Abstracts\AbstractApi;
+use Tiny\Exception\ApiParamsError;
 use Tiny\Func;
 
 class ApiHub extends AbstractApi
@@ -26,6 +27,11 @@ class ApiHub extends AbstractApi
             $params['a'] = intval($params['a']);
             $params['b'] = intval($params['b']);
         }
+
+        if (isset($params['id'])) {
+            $params['id'] = intval($params['id']);
+        }
+
         return $params;
     }
 
@@ -44,6 +50,14 @@ class ApiHub extends AbstractApi
         self::fatal($msg, __METHOD__, __CLASS__, __LINE__);
 
         return ['info' => "Hello, {$name}!"];
+    }
+
+    public function testError($id)
+    {
+        if ($id <= 0) {
+            throw new ApiParamsError('id must gt 0');
+        }
+        return ['id' => $id, 'info'=>'some info'];
     }
 
     /**
