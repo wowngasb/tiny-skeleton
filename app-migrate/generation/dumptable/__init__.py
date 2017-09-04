@@ -1,5 +1,9 @@
 # coding: utf-8
 from __future__ import unicode_literals, division, print_function, absolute_import
+
+from .codegen import CodeGenerator, get_db_doc
+
+
 import argparse
 import codecs
 import sys
@@ -7,9 +11,8 @@ import sys
 from sqlalchemy.engine import create_engine
 from sqlalchemy.schema import MetaData
 
-from codegen import CodeGenerator
 
-def main():
+def cmd_main():
     parser = argparse.ArgumentParser(description='Generates SQLAlchemy model code from an existing database.')
     parser.add_argument('url', nargs='?', help='SQLAlchemy url to the database')
     parser.add_argument('--version', action='store_true', help="print the version number and exit")
@@ -28,7 +31,7 @@ def main():
     args = parser.parse_args(fix_args)
 
     if not args.url:
-        print('You must supply a url\n', file=sys.stderr)
+        print ('You must supply a url\n', file=sys.stderr)
         parser.print_help()
         return
 
@@ -43,27 +46,3 @@ def main():
 
     db_comments_map = {} if args.nocomments else get_db_doc(engine, metadata)
     generator.render(outfile, db_comments_map)
-
-
-def get_db_doc(engine, metadata):
-    stricmp = lambda s1, s2: s1.lower()==s2.lower()
-    db_name = engine.url.database
-    db_comments_map = {}
-    def _doc(col):
-        field, comment = col['Field'], col['Comment'].strip()
-        if not comment:
-            comment = u'自增主键' if stricmp(col['Extra'], 'auto_increment') and stricmp(col['Key'], 'PRI') else \
-                u'创建时间' if stricmp(field, 'create_time') else \
-                u'更新时间' if stricmp(field, 'uptime') else u''
-        return comment
-
-    for table in metadata.tables.values():
-        if stricmp(table.name, 'migrate_version'):
-            continue
-        sql_str = 'show full columns from %s.%s' % (db_name, table.name)
-        tmp_rst = engine.execute(sql_str)
-        db_comments_map[table.name] = {col['Field']: _doc(col) for col in tmp_rst}
-    return db_comments_map
-
-if __name__ == "__main__":
-    main()

@@ -60,7 +60,9 @@ query IntrospectionQuery { __schema { queryType { name } mutationType { name } s
 
     def dump(self, options, file_name, file_str):
         if options.output:
-            save_file(os.path.join(options.output, options.path), file_name, file_str)
+            outpath = os.path.join(options.output, options.path)
+            save_file(outpath, file_name, file_str)
+            print 'save file', os.path.join(outpath, file_name)
         else:
             print "\n", '/* >>>>>>>> ', os.path.join(options.path, file_name), ' <<<<<<<< */', "\n"
             print file_str
