@@ -28,3 +28,4 @@ markdown/
 
 /test.php
 /phpinfo.php
+app-migrate/config.py
