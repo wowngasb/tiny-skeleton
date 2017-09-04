@@ -9,38 +9,74 @@ from app import models
 
 from sqlalchemy.inspection import inspect as sqlalchemyinspect
 
-def update_comment(engine, tablename, tabledoc, doc_map):
+
+from sqlalchemy import schema
+from sqlalchemy.ext.compiler import compiles
+
+'''
+@compiles(schema.CreateColumn)
+def compile(element, compiler, **kw):
+    column = element.element
+
+    if  isinstance(column.info, (dict, set)) and "special" not in column.info:
+        return compiler.visit_create_column(element, **kw)
+
+    text = "%s SPECIAL DIRECTIVE %s" % (
+            column.name,
+            compiler.type_compiler.process(column.type)
+        )
+    default = compiler.get_column_default_string(column)
+    if default is not None:
+        text += " DEFAULT " + default
+
+    if not column.nullable:
+        text += " NOT NULL"
+
+    if column.constraints:
+        text += " ".join(
+                    compiler.process(const)
+                    for const in column.constraints)
+    return text
+'''
+
+def update_comment(engine, tablename, tabledoc, col_map):
     dbname = engine.url.database
     tabledoc = tabledoc.strip().encode('utf-8') if tabledoc else ''
-    tbl_str = '''ALTER TABLE `{dbname}`.`{tablename}` COMMENT "{tabledoc}" '''.format(
+    tbl_str = ''' ALTER TABLE `{dbname}`.`{tablename}` COMMENT "{tabledoc}" '''.format(
         dbname = dbname,
         tablename = tablename,
         tabledoc = tabledoc,
     )
     tabledoc and engine.execute(tbl_str)
+    print 'execute table', tbl_str.decode('utf-8')
 
-    sch_db = 'information_schema'
-    for col, doc in doc_map.items():
-        doc = doc.strip().encode('utf-8') if doc else ''
-        sql_str = '''UPDATE `{sch_db}`.`COLUMNS` `t` SET `t`.`column_comment`="{doc}" WHERE `t`.`TABLE_SCHEMA`="{dbname}" AND `t`.`table_name`="{tablename}" AND `t`.`COLUMN_NAME`="{col}" '''.format(
-            sch_db = sch_db,
+    for col, item in col_map.items():
+        doc = item.get('doc', '').strip().encode('utf-8') if item.get('doc', '') else ''
+        _type = item.get('type', '').strip() if item.get('type', '') else ''
+        if not _type:
+            continue
+
+        sql_str = ''' ALTER TABLE `{dbname}`.`{tablename}` MODIFY COLUMN `{col}`  {_type} COMMENT "{doc}" '''.format(
             dbname = dbname,
             tablename = tablename,
             col = col,
             doc = doc,
+            _type = _type,
         )
         doc and engine.execute(sql_str)
-
+        print 'execute col', sql_str.decode('utf-8')
 
 def main():
     engine = create_engine(SQLALCHEMY_DATABASE_URI)
     tables = models.tables
     for _table in tables:
         table = sqlalchemyinspect(_table)
-        doc_map = {k:getattr(v, 'doc', None) for k, v in table.columns.items()}
+        _type = lambda c: str( schema.CreateColumn(c) ).split(' ', 1)[-1].strip()
+        _item = lambda c : {'doc':getattr(c, 'doc', None), 'type': _type(c)}
+        col_map = {k: _item(v) for k, v in table.columns.items()}
         tablename = _table.__tablename__
         tabledoc = _table.__doc__
-        update_comment(engine, tablename, tabledoc, doc_map)
+        update_comment(engine, tablename, tabledoc, col_map)
 
 if __name__ == '__main__':
     main()

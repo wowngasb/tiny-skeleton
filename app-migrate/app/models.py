@@ -2,7 +2,7 @@
 import random, time
 
 from inspect import isclass
-from sqlalchemy import Index, types, Column, BigInteger, Integer, SmallInteger, String, Text, DateTime, Float, Numeric, text
+from sqlalchemy import Index, types, Column, BigInteger, Integer, SmallInteger, String, Text, DateTime, Float, Numeric, text, TIMESTAMP
 from sqlalchemy.inspection import inspect as sqlalchemyinspect
 
 import graphene as g
@@ -32,12 +32,15 @@ class BasicRoom(Base):
     dms_pub_key = Column(String(64), nullable = False, doc = u"""DMS pub_key""")
     dms_s_key = Column(String(64), nullable = False, doc = u"""DMS s_key""", info = HiddenField)
 
-    aodian_uin = Column(Integer, nullable = False, doc = u"""奥点云 uin""")
+    aodian_uin = Column(Integer, nullable = False, server_default=text("'0'"), doc = u"""奥点云 uin""")
     lss_app = Column(String(32), nullable = False, doc = u"""流媒体 app""")
     stream = Column(String(32), nullable = False, doc = u"""流媒体 stream""")
 
     room_status = Column(SmallInteger, nullable = False, doc = u"""直播活动状态 正常 normal, 冻结 frozen, 删除 deleted""", \
         info = g.Enum('RoomStatusEnum', [('normal', 1), ('frozen', 2), ('deleted', 9)]))
+
+    updated_at = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"), doc=u"""更新时间""")
+    created_at = Column(DateTime, nullable=False, server_default=text("'0000-00-00 00:00:00'"), doc=u"""创建时间""")
 
     @classmethod
     def info(cls):

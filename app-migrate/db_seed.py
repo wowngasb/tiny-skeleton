@@ -1,26 +1,7 @@
 # coding: utf-8
-import random, time, datetime, json
-
 from app import db, models, md5key
+import datetime, json
 
-def _save(tbl, items, filter_by=None, primary_key=''):
-    all_num, save_num = len(items), 0
-    print "\n", 'SAVE %r, len:%d, filter_by:%r, primary_key:%s' % (tbl, all_num, filter_by, primary_key)
-    if filter_by is None and primary_key:
-        def filter_by(item):
-            return tbl.query.filter_by(**{primary_key: item[primary_key]}).first()
-
-    for item in items:
-        if filter_by and not filter_by(item):
-            print '.',
-            save_num += 1
-            db.session.add( tbl(**item) )
-        else:
-            print 'x',
-    db.session.commit()
-    print "\n", 'COMMIT all:%d, save:%d' % (all_num, save_num)
-
-'''
 def _BasicRoom(idx):
     return {
         'room_id': idx,
@@ -35,7 +16,88 @@ def _BasicRoom(idx):
         'room_status': 1,
     }
 
-
 BasicRoom_list = [_BasicRoom(idx) for idx in range(101, 106)]
-_save(models.BasicRoom, BasicRoom_list, primary_key='room_id')
-'''
+
+[db.session.add(models.BasicRoom(**BasicRoom)) \
+    for BasicRoom in BasicRoom_list \
+        if not models.BasicRoom.query.filter_by(room_id = BasicRoom['room_id']).first()]
+db.session.commit()
+
+
+def _ChatConfig(idx):
+    return {
+        'room_id': idx,
+        'review_type': 'direct_pub',
+        'sysmsg_type': 'show_all',
+    }
+
+ChatConfig_list = [_ChatConfig(idx) for idx in range(101, 106)]
+
+[db.session.add( models.ChatConfig(**ChatConfig) ) \
+    for ChatConfig in ChatConfig_list \
+        if not models.ChatConfig.query.filter_by(room_id = ChatConfig['room_id']).first()]
+db.session.commit()
+
+
+def _PlayerAodianConfig(idx):
+    return {
+        'room_id': idx,
+        'player_type': 'aodianplayer',
+        'rtmpUrl': 'rtmp://13830.lssplay.aodianyun.com/dyy_1736_133/a0c3d2dd3b4688f31da13991477980d9',
+        'hlsUrl': 'http://13830.hlsplay.aodianyun.com/dyy_1736_133/a0c3d2dd3b4688f31da13991477980d9.m3u8',
+        'autostart': 1,
+        'bufferlength': 1,
+        'maxbufferlength': 1,
+        'stretching': 1,
+        'controlbardisplay': 'enable',
+        'defvolume': 80,
+        'adveDeAddr': 'http://static.douyalive.com/aae/dyy/assets/img/play_bj.png',
+    }
+
+PlayerAodianConfig_list = [_PlayerAodianConfig(idx) for idx in range(101, 106)]
+
+[db.session.add( models.PlayerAodianConfig(**PlayerAodianConfig) ) \
+    for PlayerAodianConfig in PlayerAodianConfig_list \
+        if not models.PlayerAodianConfig.query.filter_by(room_id = PlayerAodianConfig['room_id']).first()]
+db.session.commit()
+
+
+def _PlayerMpsConfig(idx):
+    return {
+        'room_id': idx,
+        'player_type': 'mpsplayer',
+        'uin': 13830,
+        'appId': 'fHNNBuuB3BbUWJiP',
+        'autostart': 1,
+        'stretching': 1,
+        'mobilefullscreen': 0,
+        'controlbardisplay': 'enable',
+        'isclickplay': 1,
+        'isfullscreen': 1,
+    }
+
+PlayerMpsConfig_list = [_PlayerMpsConfig(idx) for idx in range(101, 106)]
+
+[db.session.add( models.PlayerMpsConfig(**PlayerMpsConfig) ) \
+    for PlayerMpsConfig in PlayerMpsConfig_list \
+        if not models.PlayerMpsConfig.query.filter_by(room_id = PlayerMpsConfig['room_id']).first()]
+db.session.commit()
+
+
+def _BasicUser(idx):
+    return {
+        'user_id': idx,
+        'nick': 'Nick%s' % (idx, ),
+        'avatar': 'http://58jinrongyun.com/dist/dyy/view/jiaoyu/mobile/images/male.png',
+        'user_type': 'authorized',
+    }
+
+BasicUser_list = [_BasicUser(idx) for idx in range(1000, 1010)]
+
+[db.session.add( models.BasicUser(**BasicUser) ) \
+    for BasicUser in BasicUser_list \
+        if not models.BasicUser.query.filter_by(user_id = BasicUser['user_id']).first()]
+db.session.commit()
+
+
+
