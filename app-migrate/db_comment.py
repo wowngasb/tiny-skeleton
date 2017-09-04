@@ -13,31 +13,11 @@ from sqlalchemy.inspection import inspect as sqlalchemyinspect
 from sqlalchemy import schema
 from sqlalchemy.ext.compiler import compiles
 
-'''
-@compiles(schema.CreateColumn)
-def compile(element, compiler, **kw):
-    column = element.element
 
-    if  isinstance(column.info, (dict, set)) and "special" not in column.info:
-        return compiler.visit_create_column(element, **kw)
-
-    text = "%s SPECIAL DIRECTIVE %s" % (
-            column.name,
-            compiler.type_compiler.process(column.type)
-        )
-    default = compiler.get_column_default_string(column)
-    if default is not None:
-        text += " DEFAULT " + default
-
-    if not column.nullable:
-        text += " NOT NULL"
-
-    if column.constraints:
-        text += " ".join(
-                    compiler.process(const)
-                    for const in column.constraints)
-    return text
-'''
+def addslashes(s, l = ["\\", '"', "'", "\0"]):
+    for i in l:
+        s = s.replace(i, '\\' + i)
+    return s
 
 def update_comment(engine, tablename, tabledoc, col_map):
     dbname = engine.url.database
@@ -45,7 +25,7 @@ def update_comment(engine, tablename, tabledoc, col_map):
     tbl_str = ''' ALTER TABLE `{dbname}`.`{tablename}` COMMENT "{tabledoc}" '''.format(
         dbname = dbname,
         tablename = tablename,
-        tabledoc = tabledoc,
+        tabledoc = addslashes(tabledoc),
     )
     tabledoc and engine.execute(tbl_str)
     print 'execute table', tbl_str.decode('utf-8')
@@ -60,7 +40,7 @@ def update_comment(engine, tablename, tabledoc, col_map):
             dbname = dbname,
             tablename = tablename,
             col = col,
-            doc = doc,
+            doc = addslashes(doc),
             _type = _type,
         )
         doc and engine.execute(sql_str)
