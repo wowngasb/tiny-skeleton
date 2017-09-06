@@ -38,8 +38,6 @@ class PlayerMpsConfigDao_ extends BaseDao
         }
         return static::$_orm_config;
     }
-
-    
     /*
      * INTEGER room_id 对应房间 id
      */
@@ -47,8 +45,6 @@ class PlayerMpsConfigDao_ extends BaseDao
     {
         return static::getFiledById('room_id', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) player_type 播放器类型 固定为 mpsplayer
      */
@@ -56,8 +52,6 @@ class PlayerMpsConfigDao_ extends BaseDao
     {
         return static::getFiledById('player_type', $room_id, $default);
     }
-
-    
     /*
      * INTEGER uin 用户奥点uin
      */
@@ -65,8 +59,6 @@ class PlayerMpsConfigDao_ extends BaseDao
     {
         return static::getFiledById('uin', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(32) appId mps实例id 需要静态实例
      */
@@ -74,8 +66,6 @@ class PlayerMpsConfigDao_ extends BaseDao
     {
         return static::getFiledById('appId', $room_id, $default);
     }
-
-    
     /*
      * SMALLINT autostart 是否自动播放
      */
@@ -83,8 +73,6 @@ class PlayerMpsConfigDao_ extends BaseDao
     {
         return static::getFiledById('autostart', $room_id, $default);
     }
-
-    
     /*
      * SMALLINT stretching 设置全屏模式 1代表按比例撑满至全屏 2代表铺满全屏 3代表视频原始大小
      */
@@ -92,8 +80,6 @@ class PlayerMpsConfigDao_ extends BaseDao
     {
         return static::getFiledById('stretching', $room_id, $default);
     }
-
-    
     /*
      * SMALLINT mobilefullscreen 移动端是否全屏
      */
@@ -101,8 +87,6 @@ class PlayerMpsConfigDao_ extends BaseDao
     {
         return static::getFiledById('mobilefullscreen', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) controlbardisplay 是否显示控制栏 可取值 disable enable 默认为disable
      */
@@ -110,8 +94,6 @@ class PlayerMpsConfigDao_ extends BaseDao
     {
         return static::getFiledById('controlbardisplay', $room_id, $default);
     }
-
-    
     /*
      * SMALLINT isclickplay 是否单击播放，默认为false
      */
@@ -119,8 +101,6 @@ class PlayerMpsConfigDao_ extends BaseDao
     {
         return static::getFiledById('isclickplay', $room_id, $default);
     }
-
-    
     /*
      * SMALLINT isfullscreen 是否双击全屏，默认为true
      */
@@ -128,6 +108,4 @@ class PlayerMpsConfigDao_ extends BaseDao
     {
         return static::getFiledById('isfullscreen', $room_id, $default);
     }
-
-    
 }

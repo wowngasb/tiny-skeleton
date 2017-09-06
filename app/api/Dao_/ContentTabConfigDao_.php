@@ -39,7 +39,6 @@ class ContentTabConfigDao_ extends BaseDao
         return static::$_orm_config;
     }
 
-    
     /*
      * INTEGER room_id 对应房间 id
      */
@@ -48,7 +47,6 @@ class ContentTabConfigDao_ extends BaseDao
         return static::getFiledById('room_id', $room_id, $default);
     }
 
-    
     /*
      * INTEGER content_tab_id 对应 content_tab_id
      */
@@ -57,7 +55,6 @@ class ContentTabConfigDao_ extends BaseDao
         return static::getFiledById('content_tab_id', $room_id, $default);
     }
 
-    
     /*
      * VARCHAR(16) active 当前激活的tab栏标题
      */
@@ -65,6 +62,4 @@ class ContentTabConfigDao_ extends BaseDao
     {
         return static::getFiledById('active', $room_id, $default);
     }
-
-    
 }

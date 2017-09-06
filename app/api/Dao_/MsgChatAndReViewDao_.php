@@ -38,8 +38,6 @@ class MsgChatAndReViewDao_ extends BaseDao
         }
         return static::$_orm_config;
     }
-
-    
     /*
      * INTEGER msg_id 互动消息 唯一id
      */
@@ -47,8 +45,6 @@ class MsgChatAndReViewDao_ extends BaseDao
     {
         return static::getFiledById('msg_id', $msg_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) msg_type 互动消息类型 固定为 chat_and_review
      */
@@ -56,8 +52,6 @@ class MsgChatAndReViewDao_ extends BaseDao
     {
         return static::getFiledById('msg_type', $msg_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) target_user_id 消息目标用户 用户id 用于处理私聊
      */
@@ -65,8 +59,6 @@ class MsgChatAndReViewDao_ extends BaseDao
     {
         return static::getFiledById('target_user_id', $msg_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) target_msg_id 目标消息id
      */
@@ -74,8 +66,6 @@ class MsgChatAndReViewDao_ extends BaseDao
     {
         return static::getFiledById('target_msg_id', $msg_id, $default);
     }
-
-    
     /*
      * VARCHAR(512) content_text 消息文本内容
      */
@@ -83,8 +73,6 @@ class MsgChatAndReViewDao_ extends BaseDao
     {
         return static::getFiledById('content_text', $msg_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) msg_status 聊天及审核消息状态 用户发布聊天 publish_chat, 审核发布消息 review_pub, 审核删除消息 review_del, 添加到审核列表 review_add
      */
@@ -92,8 +80,6 @@ class MsgChatAndReViewDao_ extends BaseDao
     {
         return static::getFiledById('msg_status', $msg_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) operator_id 当前操作者 用户id
      */
@@ -101,6 +87,4 @@ class MsgChatAndReViewDao_ extends BaseDao
     {
         return static::getFiledById('operator_id', $msg_id, $default);
     }
-
-    
 }

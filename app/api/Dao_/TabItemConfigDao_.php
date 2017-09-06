@@ -38,8 +38,6 @@ class TabItemConfigDao_ extends BaseDao
         }
         return static::$_orm_config;
     }
-
-    
     /*
      * INTEGER content_tab_id 对应 content_tab_id
      */
@@ -47,8 +45,6 @@ class TabItemConfigDao_ extends BaseDao
     {
         return static::getFiledById('content_tab_id', $content_tab_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) title 标题
      */
@@ -56,8 +52,6 @@ class TabItemConfigDao_ extends BaseDao
     {
         return static::getFiledById('title', $content_tab_id, $default);
     }
-
-    
     /*
      * SMALLINT new_msg 提醒新消息数量
      */
@@ -65,8 +59,6 @@ class TabItemConfigDao_ extends BaseDao
     {
         return static::getFiledById('new_msg', $content_tab_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) component 对应区域内容类型
      */
@@ -74,6 +66,4 @@ class TabItemConfigDao_ extends BaseDao
     {
         return static::getFiledById('component', $content_tab_id, $default);
     }
-
-    
 }

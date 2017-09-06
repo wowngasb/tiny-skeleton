@@ -41,7 +41,7 @@ class {{ classname }} extends {{ options.base_cls }}
         return static::$_orm_config;
     }
 
-    {% for name, column in table.columns.items() %}
+    {%- for name, column in table.columns.items() %}
     /*
      * {{ column.type }} {{  name }} {{ column.doc if column.doc else '' }}
      */
@@ -50,5 +50,5 @@ class {{ classname }} extends {{ options.base_cls }}
         return static::getFiledById('{{ name }}', ${{ table.primary_key[0].name }}, $default);
     }
 
-    {% endfor %}
+    {%- endfor %}
 }

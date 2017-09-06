@@ -38,8 +38,6 @@ class BasicRoomDao_ extends BaseDao
         }
         return static::$_orm_config;
     }
-
-    
     /*
      * INTEGER room_id 直播活动 唯一id
      */
@@ -47,8 +45,6 @@ class BasicRoomDao_ extends BaseDao
     {
         return static::getFiledById('room_id', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(32) room_title 直播活动标题
      */
@@ -56,8 +52,6 @@ class BasicRoomDao_ extends BaseDao
     {
         return static::getFiledById('room_title', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(32) chat_topic DMS topic 互动消息话题
      */
@@ -65,8 +59,6 @@ class BasicRoomDao_ extends BaseDao
     {
         return static::getFiledById('chat_topic', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(64) dms_sub_key DMS sub_key 必须确保dms状态正常并且开启系统消息通知，
      */
@@ -74,8 +66,6 @@ class BasicRoomDao_ extends BaseDao
     {
         return static::getFiledById('dms_sub_key', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(64) dms_pub_key DMS pub_key
      */
@@ -83,8 +73,6 @@ class BasicRoomDao_ extends BaseDao
     {
         return static::getFiledById('dms_pub_key', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(64) dms_s_key DMS s_key
      */
@@ -92,8 +80,6 @@ class BasicRoomDao_ extends BaseDao
     {
         return static::getFiledById('dms_s_key', $room_id, $default);
     }
-
-    
     /*
      * INTEGER aodian_uin 奥点云 uin
      */
@@ -101,8 +87,6 @@ class BasicRoomDao_ extends BaseDao
     {
         return static::getFiledById('aodian_uin', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(32) lss_app 流媒体 app
      */
@@ -110,8 +94,6 @@ class BasicRoomDao_ extends BaseDao
     {
         return static::getFiledById('lss_app', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(32) stream 流媒体 stream
      */
@@ -119,8 +101,6 @@ class BasicRoomDao_ extends BaseDao
     {
         return static::getFiledById('stream', $room_id, $default);
     }
-
-    
     /*
      * SMALLINT room_status 直播活动状态 正常 normal, 冻结 frozen, 删除 deleted
      */
@@ -128,8 +108,6 @@ class BasicRoomDao_ extends BaseDao
     {
         return static::getFiledById('room_status', $room_id, $default);
     }
-
-    
     /*
      * TIMESTAMP updated_at 更新时间
      */
@@ -137,8 +115,6 @@ class BasicRoomDao_ extends BaseDao
     {
         return static::getFiledById('updated_at', $room_id, $default);
     }
-
-    
     /*
      * DATETIME created_at 创建时间
      */
@@ -146,6 +122,4 @@ class BasicRoomDao_ extends BaseDao
     {
         return static::getFiledById('created_at', $room_id, $default);
     }
-
-    
 }

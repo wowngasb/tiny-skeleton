@@ -38,8 +38,6 @@ class ChatConfigDao_ extends BaseDao
         }
         return static::$_orm_config;
     }
-
-    
     /*
      * INTEGER room_id 对应房间 id
      */
@@ -47,8 +45,6 @@ class ChatConfigDao_ extends BaseDao
     {
         return static::getFiledById('room_id', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) review_type 房间聊天审核类型 禁止聊天 disable_chat, 关闭聊天审核，聊天直接发布 direct_pub, 开启聊天审核 review_chat
      */
@@ -56,8 +52,6 @@ class ChatConfigDao_ extends BaseDao
     {
         return static::getFiledById('review_type', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) sysmsg_type 房间系统消息显示类型 全部显示 show_all, 全部隐藏 hide_all
      */
@@ -65,6 +59,4 @@ class ChatConfigDao_ extends BaseDao
     {
         return static::getFiledById('sysmsg_type', $room_id, $default);
     }
-
-    
 }

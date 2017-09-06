@@ -38,8 +38,6 @@ class MsgDonateAndGiftDao_ extends BaseDao
         }
         return static::$_orm_config;
     }
-
-    
     /*
      * INTEGER msg_id 互动消息 唯一id
      */
@@ -47,8 +45,6 @@ class MsgDonateAndGiftDao_ extends BaseDao
     {
         return static::getFiledById('msg_id', $msg_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) msg_type 互动消息类型 固定为 donate_and_gift
      */
@@ -56,8 +52,6 @@ class MsgDonateAndGiftDao_ extends BaseDao
     {
         return static::getFiledById('msg_type', $msg_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) target_user_id 消息目标用户 用户id 用于处理打赏给指定用户 
      */
@@ -65,8 +59,6 @@ class MsgDonateAndGiftDao_ extends BaseDao
     {
         return static::getFiledById('target_user_id', $msg_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) trade_type 打赏或礼物类型 
      */
@@ -74,8 +66,6 @@ class MsgDonateAndGiftDao_ extends BaseDao
     {
         return static::getFiledById('trade_type', $msg_id, $default);
     }
-
-    
     /*
      * FLOAT trade_num 打赏或礼物数量 
      */
@@ -83,8 +73,6 @@ class MsgDonateAndGiftDao_ extends BaseDao
     {
         return static::getFiledById('trade_num', $msg_id, $default);
     }
-
-    
     /*
      * VARCHAR(512) content_text 消息文本内容
      */
@@ -92,6 +80,4 @@ class MsgDonateAndGiftDao_ extends BaseDao
     {
         return static::getFiledById('content_text', $msg_id, $default);
     }
-
-    
 }

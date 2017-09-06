@@ -38,8 +38,6 @@ class BasicMsgDao_ extends BaseDao
         }
         return static::$_orm_config;
     }
-
-    
     /*
      * INTEGER msg_id 互动消息 唯一id
      */
@@ -47,8 +45,6 @@ class BasicMsgDao_ extends BaseDao
     {
         return static::getFiledById('msg_id', $msg_id, $default);
     }
-
-    
     /*
      * INTEGER room_id 对应房间id
      */
@@ -56,8 +52,6 @@ class BasicMsgDao_ extends BaseDao
     {
         return static::getFiledById('room_id', $msg_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) user_id 对应消息发起者用户id
      */
@@ -65,8 +59,6 @@ class BasicMsgDao_ extends BaseDao
     {
         return static::getFiledById('user_id', $msg_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) msg_type 互动消息类型 聊天及审核消息 chat_and_review, 打赏及赠送礼物消息 donate_and_gift
      */
@@ -74,8 +66,6 @@ class BasicMsgDao_ extends BaseDao
     {
         return static::getFiledById('msg_type', $msg_id, $default);
     }
-
-    
     /*
      * INTEGER timestamp 消息创建时间戳
      */
@@ -83,6 +73,4 @@ class BasicMsgDao_ extends BaseDao
     {
         return static::getFiledById('timestamp', $msg_id, $default);
     }
-
-    
 }

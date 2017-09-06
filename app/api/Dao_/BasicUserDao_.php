@@ -38,8 +38,6 @@ class BasicUserDao_ extends BaseDao
         }
         return static::$_orm_config;
     }
-
-    
     /*
      * INTEGER user_id 用户 唯一id
      */
@@ -47,8 +45,6 @@ class BasicUserDao_ extends BaseDao
     {
         return static::getFiledById('user_id', $user_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) nick 用户昵称
      */
@@ -56,8 +52,6 @@ class BasicUserDao_ extends BaseDao
     {
         return static::getFiledById('nick', $user_id, $default);
     }
-
-    
     /*
      * VARCHAR(128) avatar 用户头像
      */
@@ -65,8 +59,6 @@ class BasicUserDao_ extends BaseDao
     {
         return static::getFiledById('avatar', $user_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) user_type 用户类型 游客 guest, 已认证 authorized, 管理者 manager, 发布者 publisher
      */
@@ -74,6 +66,4 @@ class BasicUserDao_ extends BaseDao
     {
         return static::getFiledById('user_type', $user_id, $default);
     }
-
-    
 }

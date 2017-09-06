@@ -38,8 +38,6 @@ class PlayerAodianConfigDao_ extends BaseDao
         }
         return static::$_orm_config;
     }
-
-    
     /*
      * INTEGER room_id 对应房间 id
      */
@@ -47,8 +45,6 @@ class PlayerAodianConfigDao_ extends BaseDao
     {
         return static::getFiledById('room_id', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) player_type 播放器类型 固定为 aodianplayer
      */
@@ -56,8 +52,6 @@ class PlayerAodianConfigDao_ extends BaseDao
     {
         return static::getFiledById('player_type', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(128) rtmpUrl 控制台开通的APP rtmp地址 必要参数
      */
@@ -65,8 +59,6 @@ class PlayerAodianConfigDao_ extends BaseDao
     {
         return static::getFiledById('rtmpUrl', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(128) hlsUrl 控制台开通的APP hls地址 必要参数
      */
@@ -74,8 +66,6 @@ class PlayerAodianConfigDao_ extends BaseDao
     {
         return static::getFiledById('hlsUrl', $room_id, $default);
     }
-
-    
     /*
      * SMALLINT autostart 是否自动播放
      */
@@ -83,8 +73,6 @@ class PlayerAodianConfigDao_ extends BaseDao
     {
         return static::getFiledById('autostart', $room_id, $default);
     }
-
-    
     /*
      * SMALLINT bufferlength 视频缓冲时间 默认为1秒
      */
@@ -92,8 +80,6 @@ class PlayerAodianConfigDao_ extends BaseDao
     {
         return static::getFiledById('bufferlength', $room_id, $default);
     }
-
-    
     /*
      * SMALLINT maxbufferlength 最大视频缓冲时间 默认为2秒
      */
@@ -101,8 +87,6 @@ class PlayerAodianConfigDao_ extends BaseDao
     {
         return static::getFiledById('maxbufferlength', $room_id, $default);
     }
-
-    
     /*
      * SMALLINT stretching 设置全屏模式 1代表按比例撑满至全屏 2代表铺满全屏 3代表视频原始大小
      */
@@ -110,8 +94,6 @@ class PlayerAodianConfigDao_ extends BaseDao
     {
         return static::getFiledById('stretching', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(16) controlbardisplay 是否显示控制栏 可取值 disable enable 默认为disable
      */
@@ -119,8 +101,6 @@ class PlayerAodianConfigDao_ extends BaseDao
     {
         return static::getFiledById('controlbardisplay', $room_id, $default);
     }
-
-    
     /*
      * SMALLINT defvolume 默认音量
      */
@@ -128,8 +108,6 @@ class PlayerAodianConfigDao_ extends BaseDao
     {
         return static::getFiledById('defvolume', $room_id, $default);
     }
-
-    
     /*
      * VARCHAR(128) adveDeAddr 封面图地址
      */
@@ -137,6 +115,4 @@ class PlayerAodianConfigDao_ extends BaseDao
     {
         return static::getFiledById('adveDeAddr', $room_id, $default);
     }
-
-    
 }
