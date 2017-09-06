@@ -9,6 +9,7 @@
 namespace app\api;
 
 
+use app\api\Dao\BasicRoomDao;
 use Tiny\Abstracts\AbstractApi;
 use Tiny\Exception\ApiParamsError;
 use Tiny\Func;
@@ -57,7 +58,7 @@ class ApiHub extends AbstractApi
         if ($id <= 0) {
             throw new ApiParamsError('id must gt 0');
         }
-        return ['id' => $id, 'info'=>'some info'];
+        return ['id' => $id, 'info' => 'some info'];
     }
 
     /**
@@ -76,6 +77,13 @@ class ApiHub extends AbstractApi
         self::error($msg, __METHOD__, __CLASS__, __LINE__);
         self::fatal($msg, __METHOD__, __CLASS__, __LINE__);
         return ['data' => $sum];
+    }
+
+
+    public function testOrm($room_id = 101)
+    {
+        $roomInfo = BasicRoomDao::getDataById($room_id, 0);
+        return ['room' => $roomInfo];
     }
 
 }

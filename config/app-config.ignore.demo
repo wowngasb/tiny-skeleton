@@ -1,8 +1,8 @@
 <?php
-define("ROOT_PATH", dirname(__DIR__) . DIRECTORY_SEPARATOR);
-require_once(ROOT_PATH . 'vendor/autoload.php');
- 
+!defined('ROOT_PATH') && define("ROOT_PATH", dirname(__DIR__) . DIRECTORY_SEPARATOR);
+
 if (!defined('DEV_MODEL')) {
+    require(ROOT_PATH . 'vendor/autoload.php');
     ini_set('display_errors', 0);
     ini_set('log_errors', 1);
     date_default_timezone_set('Asia/Shanghai');
@@ -21,7 +21,7 @@ return [
         'level' => 'DEBUG',  //日志记录级别  ['ALL' => 0, 'DEBUG' => 10, 'INFO' => 20, 'WARN' => 30, 'ERROR' => 40, 'FATAL' => 50, 'OFF' => 60,]
     ],
     'ENV_CACHE' => [
-        'type' => 'file',
+        'type' => 'files',
         'config' => [
             'path' => ROOT_PATH . 'cache' . DIRECTORY_SEPARATOR
         ]
@@ -60,7 +60,7 @@ return [
             'database' => '',    //可省略
             'timeout' => 0,    //可省略
         ]
-        // 或者  ['type'=>'file', 'config'=>[ 'path' => ROOT_PATH . 'cache' . DIRECTORY_SEPARATOR ] ]
+        // 或者  ['type'=>'files', 'config'=>[ 'path' => ROOT_PATH . 'cache' . DIRECTORY_SEPARATOR ] ]
     ],
     'ENV_DB' => [
         'driver' => 'mysql',

@@ -33,7 +33,7 @@ class TabItemConfigDao_ extends BaseDao
     {
         if (is_null(static::$_orm_config)) {
             $db_config = Application::app()->getEnv('ENV_DB');
-            $db_name = !empty($db_config['database']) ? !empty($db_config['database']) : 'test';
+            $db_name = !empty($db_config['database']) ? $db_config['database'] : 'test';
             static::$_orm_config = new OrmConfig($db_name, 'tab_item_config', 'content_tab_id', static::$cache_time, static::$max_select);
         }
         return static::$_orm_config;

@@ -397,7 +397,7 @@ final class Request
      */
     public function _session($name = null, $default = '')
     {
-        return is_null($name) ? $_SESSION : (isset($_SESSION[$name]) ? $_SESSION[$name] : $default);
+        return is_null($name) ? (!empty($_SESSION) ? $_SESSION : []) : (isset($_SESSION[$name]) ? $_SESSION[$name] : $default);
     }
 
     public function set_session($name, $data)

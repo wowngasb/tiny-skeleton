@@ -35,7 +35,7 @@ class {{ classname }} extends {{ options.base_cls }}
     {
         if (is_null(static::$_orm_config)) {
             $db_config = Application::app()->getEnv('ENV_DB');
-            $db_name = !empty($db_config['database']) ? !empty($db_config['database']) : 'test';
+            $db_name = !empty($db_config['database']) ? $db_config['database'] : 'test';
             static::$_orm_config = new OrmConfig($db_name, '{{ table.class_.__tablename__ }}', '{{ table.primary_key[0].name }}', static::$cache_time, static::$max_select);
         }
         return static::$_orm_config;
@@ -49,6 +49,7 @@ class {{ classname }} extends {{ options.base_cls }}
     {
         return static::getFiledById('{{ name }}', ${{ table.primary_key[0].name }}, $default);
     }
+
 
     {%- endfor %}
 }

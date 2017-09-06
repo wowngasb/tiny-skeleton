@@ -46,7 +46,7 @@ trait CacheTrait
      * @return array
      * @throws \phpFastCache\Exceptions\phpFastCacheDriverCheckException
      */
-    protected static function _cacheDataManager($method, $key, callable $func, callable $filter, $timeCache = null, $is_log = false, $prefix = null, array $tags = [])
+    public static function _cacheDataManager($method, $key, callable $func, callable $filter, $timeCache = null, $is_log = false, $prefix = null, array $tags = [])
     {
         $mCache = self::getCacheInstance();
         if (empty($key) || empty($method) || empty($mCache)) {

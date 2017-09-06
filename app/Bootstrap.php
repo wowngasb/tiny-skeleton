@@ -2,8 +2,10 @@
 
 namespace app;
 
+use app\api\base\BaseDao;
 use Tiny\Abstracts\AbstractBootstrap;
 use Tiny\Application;
+use Tiny\OrmQuery\OrmConfig;
 use Tiny\Request;
 use Tiny\Response;
 use Tiny\Route\RouteMap;
@@ -30,10 +32,11 @@ final class Bootstrap extends AbstractBootstrap
             ->addRoute('develop', new RouteMap('/develop', 'develop'), new DevelopDispatch())
             ->addRoute('page', new RouteMap('/'), new PageDispatch());  // 添加默认简单路由
 
-        Application::on('routerShutdown', function (Application $obj, Request $request, Response $response) {
+        OrmConfig::on('runSql', function($obj, $sql_str, $time, $_tag){
             false && func_get_args();
+            $time_str = round($time, 3) * 1000;
+            static::debugConsole("{$sql_str} <{$time_str}ms>", $_tag, 1);
         });
-
         return parent::bootstrap($appname, $app);
     }
 

@@ -8,7 +8,6 @@
 
 namespace Tiny\Traits;
 
-use Tiny\Abstracts\AbstractBootstrap;
 use Tiny\Exception\OrmStartUpError;
 use Tiny\Plugin\DbHelper;
 use Tiny\OrmQuery\AbstractQuery;
@@ -42,7 +41,6 @@ use Tiny\OrmQuery\Select;
  */
 trait OrmTrait
 {
-    use CacheTrait, LogTrait;
 
     protected static $_REDIS_PREFIX_DB = 'DbCache';
 
@@ -141,7 +139,7 @@ trait OrmTrait
         }
         $tag = "{$primary_key}={$id}";
         $table = "{$db_name}.{$table_name}";
-        $data = static::_cacheDataManager($table, $tag, function () use ($id) {
+        $data = CacheTrait::_cacheDataManager($table, $tag, function () use ($id) {
             $tmp = static::getItem($id);
             return $tmp;
         }, function ($data) {
@@ -216,7 +214,7 @@ trait OrmTrait
 
         $prefix = !is_null($prefix) ? $prefix : static::$_REDIS_PREFIX_DB;
 
-        return static::_cacheDataManager($select->method, $select->key, $select->func, $select->filter, $select->timeCache, $is_log, $prefix, $select->tags);
+        return CacheTrait::_cacheDataManager($select->method, $select->key, $select->func, $select->filter, $select->timeCache, $is_log, $prefix, $select->tags);
     }
 
     ####################################
