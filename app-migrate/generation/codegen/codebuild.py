@@ -132,8 +132,8 @@ class BuildPHP(Build):
             tpl = 'table-dao.php.tpl',
         ),
         graphql = dict(
-            path = 'GraphQL',
-            namespace = _php_namespace('app\\api\\GraphQL', lambda p: p.replace('GraphQL', '')),
+            path = 'GraphQL_',
+            namespace = _php_namespace('app\\api\\GraphQL_', lambda p: p.replace('GraphQL_', '')),
             enum = dict(
                 path = 'Enum',
                 tpl = 'graphql-enum.php.tpl',
@@ -158,8 +158,8 @@ class BuildPHP(Build):
                 path = 'ExtType',
                 tpl = 'graphql-query.php.tpl',
             ),
-            register = dict(
-                tpl = 'graphql-register.php.tpl',
+            types = dict(
+                tpl = 'graphql-types.php.tpl',
             ),
         )
     )
@@ -175,7 +175,7 @@ class BuildPHP(Build):
             options[tag]['path'] = path_join([p for p in (options['path'], options[tag]['path']) if p])
             merge_default(options[tag], options, lambda k,v: not isinstance(v, dict))
 
-        for tag in ('enum', 'type', 'exttype', 'abstracttype', 'union', 'query', 'register'):
+        for tag in ('enum', 'type', 'exttype', 'abstracttype', 'union', 'query', 'types'):
             options['graphql'][tag].setdefault('path', '')
             options['graphql'][tag]['path'] = path_join([p for p in (options['graphql']['path'], options['graphql'][tag]['path']) if p])
             merge_default(options['graphql'][tag], options['graphql'], lambda k,v: not isinstance(v, dict))
@@ -184,6 +184,7 @@ class BuildPHP(Build):
         self.class_map = OrderedDict()
 
     def build(self):
+
         self._build_query(self.options.graphql.query, self.query)
         self._build_type(self.options.graphql.type, self.types)
         self._build_exttype(self.options.graphql.exttype, self.exttypes)
@@ -191,14 +192,26 @@ class BuildPHP(Build):
         self._build_union(self.options.graphql.union, self.unions)
 
         self._build_abstracttype(self.options.graphql.abstracttype, self.abstracttypes, self.class_map)
-        self._build_register(self.options.graphql, self.query, self.types, self.exttypes, self.enums, self.unions, self.class_map)
+        self._build_types(self.options.graphql.types, self.query, self.types, self.exttypes, self.enums, self.unions, self.class_map)
 
         self._build_dao_(self.options.dao_, self.tables)
         self._build_dao(self.options.dao, self.tables)
         return True
 
-    def _build_register(self, options, query, types, exttypes, enums, unions, class_map):
-        pass
+    def _build_types(self, options, query, types, exttypes, enums, unions, class_map):
+        classname = 'Types'
+        file_name = options.classname(classname) + options.file_ext
+        self.render(
+            options,
+            file_name,
+            query = query,
+            types = types,
+            exttypes = exttypes,
+            enums = enums,
+            unions = unions,
+            _class_map = class_map,
+            _classname = classname,
+        )
 
     def _build_query(self, options, query):
         classname = 'Query'
