@@ -9,12 +9,12 @@
 namespace app\api\base;
 
 
+use Tiny\Traits\CacheTrait;
 use Tiny\Traits\LogTrait;
-use Tiny\Traits\OrmTrait;
 
 class BaseModel
 {
-    use OrmTrait, LogTrait;
+    use LogTrait, CacheTrait;
 
 
 }

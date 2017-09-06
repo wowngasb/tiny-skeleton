@@ -1,6 +1,6 @@
 /*!
  * ApiHub.js
- * build at 2017-09-04 00:18:58
+ * build at 2017-09-07 01:45:23
  */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -97,39 +97,6 @@ function ApiHubHelper(){
         return _rfcApi('POST', '/api/ApiHub/testSum' ,args, success, error, log);
     };
     this.testSum_args = {"a":"?","b":"?"};
-
-    
-    this.doneApi = function(args, success, error) {
-        args = args || {};
-        var log = function(tag, use_time, args, data){
-            var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
-            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.doneApi('+use_time+'ms)', 'args:', args, 'data:', data);
-        };
-        return _rfcApi('POST', '/api/ApiHub/doneApi' ,args, success, error, log);
-    };
-    this.doneApi_args = {"action":"?","params":"?","result":"?","callback":"?"};
-
-    
-    this.exceptApi = function(args, success, error) {
-        args = args || {};
-        var log = function(tag, use_time, args, data){
-            var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
-            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.exceptApi('+use_time+'ms)', 'args:', args, 'data:', data);
-        };
-        return _rfcApi('POST', '/api/ApiHub/exceptApi' ,args, success, error, log);
-    };
-    this.exceptApi_args = {"action":"?","params":"?","ex":"?","callback":"?"};
-
-    
-    this.on = function(args, success, error) {
-        args = args || {};
-        var log = function(tag, use_time, args, data){
-            var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
-            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.on('+use_time+'ms)', 'args:', args, 'data:', data);
-        };
-        return _rfcApi('POST', '/api/ApiHub/on' ,args, success, error, log);
-    };
-    this.on_args = {"event":"?","callback":"?"};
 }
 
 /*  */

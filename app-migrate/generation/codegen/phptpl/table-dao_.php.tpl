@@ -11,7 +11,6 @@ namespace {{ namespace }};
 use {{ options.base_namespace }};
 use Tiny\Application;
 use Tiny\OrmQuery\OrmConfig;
-use Tiny\Traits\OrmTrait;
 
 
 /**

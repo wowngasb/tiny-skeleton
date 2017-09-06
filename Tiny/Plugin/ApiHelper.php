@@ -25,6 +25,9 @@ class ApiHelper
         'getactionname' => 1,
         'getcacheinstance' => 1,
         'setactionname' => 1,
+        'on' => 1,
+        'exceptapi' => 1,
+        'doneapi' => 1,
     ];
 
     public static function fixActionParams($obj, $func, $params)
