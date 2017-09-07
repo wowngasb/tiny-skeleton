@@ -1,5 +1,5 @@
 /*!
- * ApiHub.js
+ * GraphQLApi.js
  * Auto Create By ApiHelper
  * build at 2017-09
  */
@@ -11,7 +11,7 @@
 
 /*  */
 
-function ApiHubHelper(){
+function GraphQLApiHelper(){
     var _this = this;
     this.DEBUG = true;
     var _log_func = (typeof console != "undefined" && typeof console.info == "function" && typeof console.warn == "function") ? {INFO: console.info.bind(console), ERROR: console.warn.bind(console)} : {};
@@ -57,61 +57,19 @@ function ApiHubHelper(){
         });
     };
 
-    /**
-     * api hello
-     * @param string $name
-     * @return array
-     */
-    this.hello = function(args, success, error) {
-        args = args || {};
-        var log = function(tag, use_time, args, data){
-            var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
-            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.hello('+use_time+'ms)', 'args:', args, 'data:', data);
-        };
-        return _rfcApi('POST', '/api/ApiHub/hello' ,args, success, error, log);
-    };
-    this.hello_args = {"name":"world"};
-
     
-    this.testError = function(args, success, error) {
+    this.exec = function(args, success, error) {
         args = args || {};
         var log = function(tag, use_time, args, data){
             var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
-            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.testError('+use_time+'ms)', 'args:', args, 'data:', data);
+            _this.DEBUG && f && f(_formatDate(), '['+tag+'] GraphQLApi.exec('+use_time+'ms)', 'args:', args, 'data:', data);
         };
-        return _rfcApi('POST', '/api/ApiHub/testError' ,args, success, error, log);
+        return _rfcApi('POST', '/api/GraphQLApi/exec' ,args, success, error, log);
     };
-    this.testError_args = {"id":"?"};
-
-    /**
-     * test sum
-     * @param int $a
-     * @param int $b
-     * @return array
-     */
-    this.testSum = function(args, success, error) {
-        args = args || {};
-        var log = function(tag, use_time, args, data){
-            var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
-            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.testSum('+use_time+'ms)', 'args:', args, 'data:', data);
-        };
-        return _rfcApi('POST', '/api/ApiHub/testSum' ,args, success, error, log);
-    };
-    this.testSum_args = {"a":"?","b":"?"};
-
-    
-    this.testOrm = function(args, success, error) {
-        args = args || {};
-        var log = function(tag, use_time, args, data){
-            var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
-            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.testOrm('+use_time+'ms)', 'args:', args, 'data:', data);
-        };
-        return _rfcApi('POST', '/api/ApiHub/testOrm' ,args, success, error, log);
-    };
-    this.testOrm_args = {"room_id":101};
+    this.exec_args = {"query":"{hello}","variables":null};
 }
 
 /*  */
 
-return new ApiHubHelper();
+return new GraphQLApiHelper();
 })));

@@ -6,6 +6,7 @@ use app\api\base\BaseDao;
 use Tiny\Abstracts\AbstractBootstrap;
 use Tiny\Application;
 use Tiny\OrmQuery\OrmConfig;
+use Tiny\Plugin\graphiql\dispatch\GraphiQLDispatch;
 use Tiny\Request;
 use Tiny\Response;
 use Tiny\Route\RouteMap;
@@ -29,7 +30,8 @@ final class Bootstrap extends AbstractBootstrap
             return $app;
         }
         $app->addRoute('api', new RouteMap('/api', 'api', ['api', 'ApiHub', 'hello']), new ApiDispatch())
-            ->addRoute('develop', new RouteMap('/develop', 'develop'), new DevelopDispatch())
+            ->addRoute('develop', new RouteMap('/develop', 'develop', ['develop', 'index', 'index']), new DevelopDispatch())
+            ->addRoute('graphiql', new RouteMap('/graphiql', 'graphiql', ['graphiql', 'index', 'index']), new GraphiQLDispatch())
             ->addRoute('page', new RouteMap('/'), new PageDispatch());  // 添加默认简单路由
 
         OrmConfig::on('runSql', function($obj, $sql_str, $time, $_tag){

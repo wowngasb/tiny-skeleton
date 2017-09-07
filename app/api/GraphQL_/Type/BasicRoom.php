@@ -22,7 +22,7 @@ class BasicRoom extends ObjectType
     {
         if (is_null($type)) {
             /** @var Types $type */
-            $type = new Types();
+            $type = Types::class;
         }
         $config = [
             'description' => "直播活动基本信息 每个条目对应一个活动",

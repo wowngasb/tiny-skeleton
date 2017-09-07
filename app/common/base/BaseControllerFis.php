@@ -22,8 +22,8 @@ class BaseControllerFis extends ControllerFis
         $config_dir = ROOT_PATH . Func::joinNotEmpty(DIRECTORY_SEPARATOR, ["{$appname}-public", 'tpl']);
         $template_dir = ROOT_PATH . Func::joinNotEmpty(DIRECTORY_SEPARATOR, ["{$appname}-public", 'tpl']);
         $this->setFisReleasePath($config_dir, $template_dir);
-
-        $this->assign('webname', Application::app()->getEnv('ENV_WEB', [])['name']);
+        $env_web = Application::app()->getEnv('ENV_WEB', []);
+        $this->assign('webname', !empty($env_web['name']) ? $env_web['name'] : '');
     }
 
 }

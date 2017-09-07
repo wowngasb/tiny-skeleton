@@ -26,13 +26,13 @@
     <h2 class="tip-title">常用脚本：</h2>
     <div class="control-group">
         <a class="button button-success array_btn" target="new"
-           href="<?= \Tiny\Request::urlTo($request, ['develop', 'Deploy', 'runCrontab'], ['script' => 'PerMinuteTask.php']) ?>">每分钟任务</a>
+           href="<?= \Tiny\Request::urlTo($request, ['', 'Deploy', 'runCrontab'], ['script' => 'PerMinuteTask.php']) ?>">每分钟任务</a>
         <a class="button button-success array_btn" target="new"
-           href="<?= \Tiny\Request::urlTo($request, ['develop', 'Deploy', 'runCrontab'], ['script' => 'PerDayTask.php']) ?>">每日任务</a>
+           href="<?= \Tiny\Request::urlTo($request, ['', 'Deploy', 'runCrontab'], ['script' => 'PerDayTask.php']) ?>">每日任务</a>
         <a class="button button-success array_btn" target="new"
-           href="<?= \Tiny\Request::urlTo($request, ['develop', 'Deploy', 'buildApiModJs'], ['dev_debug' => 1,]) ?>">编译API</a>
+           href="<?= \Tiny\Request::urlTo($request, ['', 'Deploy', 'buildApiModJs'], ['dev_debug' => 1,]) ?>">编译API</a>
         <a class="button button-success array_btn" target="new"
-           href="<?= \Tiny\Request::urlTo($request, ['develop', 'Deploy', 'phpInfo']) ?>">phpInfo</a>
+           href="<?= \Tiny\Request::urlTo($request, ['', 'Deploy', 'phpInfo']) ?>">phpInfo</a>
         <a class="button button-success array_btn" target="new" href="<?= SYSTEM_HOST . 'index.php' ?>">首页</a>
     </div>
 </div>
@@ -86,7 +86,7 @@
     BUI.use('bui/form', function (Form) {
         //定义级联下拉框的类型
         BUI.Form.Group.Select.addType('custom1', {
-            url: "<?=\Tiny\Request::urlTo($request, ['develop', 'syslog', 'getmethodlist'])?>",
+            url: "<?=\Tiny\Request::urlTo($request, ['', '', 'getmethodlist'])?>",
             root: {
                 id: '0',
                 children: <?= $json_api_list?>
@@ -99,7 +99,7 @@
         $('#api_method').change(function () {
             var cls = $('#api_class').val(),
                 method = $('#api_method').val();
-            var api_url = "<?=\Tiny\Request::urlTo($request, ['develop', 'syslog', 'getparamlist'])?>";
+            var api_url = "<?=\Tiny\Request::urlTo($request, ['', '', 'getparamlist'])?>";
             $.ajax({
                 type: "GET",
                 url: api_url,

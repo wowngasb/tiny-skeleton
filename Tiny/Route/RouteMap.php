@@ -8,7 +8,7 @@
 
 namespace Tiny\Route;
 
-use Tiny\Abstracts\AbstractBootstrap;
+
 use Tiny\Func;
 use Tiny\Request;
 use Tiny\RouteInterface;

@@ -17,13 +17,13 @@ class sysLog extends BaseDevelopController
     {
         parent::beforeAction();
         if (!$this->authDevelopKey()) {  //认证 不通过
-            Application::redirect(Request::urlTo($this->getRequest(), ['develop', 'index', 'index']));
+            Application::redirect(Request::urlTo($this->getRequest(), ['', 'index', 'index']));
         }
     }
 
     public function index()
     {
-        Application::app()->forward($this->getRequest(), $this->getResponse(), ['develop', 'syslog', 'showlogdir']);
+        Application::forward($this->getRequest(), $this->getResponse(), ['', '', 'showlogdir']);
     }
 
     public function showLogDir()
@@ -102,7 +102,7 @@ class sysLog extends BaseDevelopController
                 $rst[] = [
                     'text' => $val['name'],
                     'id' => $val['name'],
-                    'href' => Request::urlTo($this->getRequest(), ['develop', 'syslog', 'showlogfile'], ['file' => $val['path'], 'scroll_to' => 'end']),
+                    'href' => Request::urlTo($this->getRequest(), ['', '', 'showlogfile'], ['file' => $val['path'], 'scroll_to' => 'end']),
                     'leaf' => true,
                     'file_info' => "create_time : {$val['ctime_str']}, modify_time : {$val['mtime_str']}, size : {$val['size_str']}",
                 ];

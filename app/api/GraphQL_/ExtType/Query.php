@@ -6,6 +6,7 @@
  */
 namespace app\api\GraphQL_\ExtType;
 
+use app\api\GraphQL_\Types;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 

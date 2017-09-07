@@ -11,9 +11,8 @@ namespace app\api;
 use app\api\GraphQL\Types;
 use ErrorException;
 
-use \GraphQL\Schema;
+use GraphQL\Type\Schema;
 use \GraphQL\GraphQL;
-use \GraphQL\Type\Definition\Config;
 use \GraphQL\Error\FormattedError;
 use Tiny\Abstracts\AbstractApi;
 
@@ -22,27 +21,28 @@ class GraphQLApi extends AbstractApi
 
     public function exec($query = '{hello}', array $variables = null)
     {
+        // GraphQL schema to be passed to query executor:
+        $schema = new Schema([
+            'query' => Types::Query()
+        ]);
+
         if (DEV_MODEL == 'DEBUG') {
-            Config::enableValidation(); // Enable additional validation of type configs (disabled by default because it is costly)
+            $schema->assertValid(); // Enable additional validation of type configs (disabled by default because it is costly)
             $phpErrors = [];  // Catch custom errors (to report them in query results if debugging is enabled)
             set_error_handler(function ($severity, $message, $file, $line) use (&$phpErrors) {
                 $phpErrors[] = new ErrorException($message, 0, $severity, $file, $line);
             });
         }
-
+        
+        $result = [];
         try {
-            // GraphQL schema to be passed to query executor:
-            $schema = new Schema([
-                'query' => Types::query()
-            ]);
-
-            $result = GraphQL::execute(
+            $result = GraphQL::executeQuery(
                 $schema,
                 $query,
                 null,
                 $this,
                 $variables
-            );
+            )->toArray();
 
             // Add reported PHP errors to result (if any)
             if (DEV_MODEL == 'DEBUG' && !empty($phpErrors)) {
@@ -51,7 +51,6 @@ class GraphQLApi extends AbstractApi
         } catch (\Exception $error) {
             $result['extensions']['exception'] = FormattedError::createFromException($error);
         }
-
         return $result;
     }
 

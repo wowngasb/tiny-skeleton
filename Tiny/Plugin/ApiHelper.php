@@ -74,7 +74,7 @@ class ApiHelper
 
     public static function model2js($cls, $method_list, $dev_debug = true)
     {
-        $date_str = date('Y-m-d H:i:s');
+        $date_str = date('Y-m');
         $log_msg = "build API.js@{$cls}, method:" . json_encode($method_list);
         self::debug($log_msg, __METHOD__, __CLASS__, __LINE__);
 
@@ -82,6 +82,7 @@ class ApiHelper
         $js_str = <<<EOT
 /*!
  * {$cls}.js
+ * Auto Create By ApiHelper
  * build at {$date_str}
  */
 (function (global, factory) {

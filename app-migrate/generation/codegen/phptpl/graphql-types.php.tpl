@@ -1,6 +1,7 @@
 <?php
 {%- set namespace = options.namespace(options.path) %}
 {%- set classname = _classname %}
+{%- set class_map = _class_map %}
 {%- set description = 'Acts as a registry and factory for types.' %}
 /**
  * Created by table_graphQL.
@@ -9,16 +10,35 @@
  */
 namespace {{ namespace }};
 
-//import table classes
+//import query classes
+use {{ class_map[ query.name ][0].namespace( class_map[ query.name ][0].path + '\\' + query.name ) }};
+
+//import Type tables classes
+
+{%- for t, v in types.items() %}
+use {{ class_map[ t ][0].namespace( class_map[t][0].path + '\\' + t ) }};
+{%- endfor %}
+
+//import Type exttypes classes
+
+{%- for t, v in exttypes.items() %}
+use {{ class_map[ t ][0].namespace( class_map[t][0].path + '\\' + t ) }};
+{%- endfor %}
+
+//import Type enums classes
+
+{%- for t, v in enums.items() %}
+use {{ class_map[ t ][0].namespace( class_map[t][0].path + '\\' + t ) }};
+{%- endfor %}
+
+//import Type unions classes
+
+{%- for t, v in unions.items() %}
+use {{ class_map[ t ][0].namespace( class_map[t][0].path + '\\' + t ) }};
+{%- endfor %}
 
 
-//import state enum classes
-use GraphQL\Enum\MsgTypeEnum;
-use GraphQL\Enum\RoomStatusEnum;
-use GraphQL\Enum\UserTypeEnum;
-use GraphQL\Enum\ReviewTypeEnum;
-use GraphQL\Enum\MsgStatusEnum;
-
+//import Type Definition classes
 use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\NonNull;
 use GraphQL\Type\Definition\Type;
@@ -35,180 +55,103 @@ class {{ classname }}
     ########  root query type  #########
     ####################################
 
-    private static $_mQuery = null;
+    private static $_m{{ query.name }} = null;
 
     /**
-     * 必须实现 AbstractQueryType 中的虚方法 才可以使用查询 此方法需要重写
-     * @return AbstractQueryType
+     * 必须实现 Abstract{{ query.name }} 中的虚方法 才可以使用完整的查询 此方法需要重写
+     * @param array $config
+     * @param mixed $type
+     * @return {{ query.name }}
      */
-    public static function query()
+    public static function {{ query.name }}(array $config = [], $type = null)
     {
-        return self::$_mQuery ?: (self::$_mQuery = null);
+        return self::$_m{{ query.name }} ?: (self::$_m{{ query.name }} = new {{ query.name }}($config, $type));
     }
 
     ####################################
     ##########  table types  ##########
     ####################################
+    
+    {%- for t, v in types.items() %}
 
-    private static $_mBasicMsg = null;
-
-    /**
-     * @param array $config
-     * @param mixed $type
-     * @return BasicMsg
-     */
-    public static function BasicMsg(array $config = [], $type = null)
-    {
-        return self::$_mBasicMsg ?: (self::$_mBasicMsg = new BasicMsg($config, $type));
-    }
-
-    private static $_mBasicRoom = null;
+    private static $_m{{ t }} = null;
 
     /**
+     * {{ class_map[ t ][1].description if class_map[ t ][1].description else t }}
      * @param array $config
      * @param mixed $type
-     * @return BasicRoom
+     * @return {{ t }}
      */
-    public static function BasicRoom(array $config = [], $type = null)
+    public static function {{ t }}(array $config = [], $type = null)
     {
-        return self::$_mBasicRoom ?: (self::$_mBasicRoom = new BasicRoom($config, $type));
+        return self::$_m{{ t }} ?: (self::$_m{{ t }} = new {{ t }}($config, $type));
     }
 
-    private static $_mBasicUser = null;
-
-    /**
-     * @param array $config
-     * @param mixed $type
-     * @return BasicUser
-     */
-    public static function BasicUser(array $config = [], $type = null)
-    {
-        return self::$_mBasicUser ?: (self::$_mBasicUser = new BasicUser($config, $type));
-    }
-
-    private static $_mChatConfig = null;
-
-    /**
-     * @param array $config
-     * @param mixed $type
-     * @return ChatConfig
-     */
-    public static function ChatConfig(array $config = [], $type = null)
-    {
-        return self::$_mChatConfig ?: (self::$_mChatConfig = new ChatConfig($config, $type));
-    }
-
-    private static $_mMsgChatAndReview = null;
-
-    /**
-     * @param array $config
-     * @param mixed $type
-     * @return MsgChatAndReview
-     */
-    public static function MsgChatAndReview(array $config = [], $type = null)
-    {
-        return self::$_mMsgChatAndReview ?: (self::$_mMsgChatAndReview = new MsgChatAndReview($config, $type));
-    }
-
-    private static $_mMsgDonateAndGift = null;
-
-    /**
-     * @param array $config
-     * @param mixed $type
-     * @return MsgDonateAndGift
-     */
-    public static function MsgDonateAndGift(array $config = [], $type = null)
-    {
-        return self::$_mMsgDonateAndGift ?: (self::$_mMsgDonateAndGift = new MsgDonateAndGift($config, $type));
-    }
-
-    private static $_mPlayerAodianConfig = null;
-
-    /**
-     * @param array $config
-     * @param mixed $type
-     * @return PlayerAodianConfig
-     */
-    public static function PlayerAodianConfig(array $config = [], $type = null)
-    {
-        return self::$_mPlayerAodianConfig ?: (self::$_mPlayerAodianConfig = new PlayerAodianConfig($config, $type));
-    }
-
-    private static $_mPlayerMpsConfig = null;
-
-    /**
-     * @param array $config
-     * @param mixed $type
-     * @return PlayerMpsConfig
-     */
-    public static function PlayerMpsConfig(array $config = [], $type = null)
-    {
-        return self::$_mPlayerMpsConfig ?: (self::$_mPlayerMpsConfig = new PlayerMpsConfig($config, $type));
-    }
+    {%- endfor %}
 
     ####################################
-    ######### state enum types #########
+    ######### exttypes types #########
     ####################################
 
-    private static $_mMsgTypeEnum = null;
+    {%- for t, v in exttypes.items() %}
+
+    private static $_m{{ t }} = null;
 
     /**
-     * @return MsgTypeEnum
+     * {{ class_map[ t ][1].description if class_map[ t ][1].description else t }}
+     * @param array $config
+     * @param mixed $type
+     * @return {{ t }}
      */
-    public static function MsgTypeEnum()
+    public static function {{ t }}(array $config = [], $type = null)
     {
-        return self::$_mMsgTypeEnum ?: (self::$_mMsgTypeEnum = new MsgTypeEnum());
+        return self::$_m{{ t }} ?: (self::$_m{{ t }} = new {{ t }}($config, $type));
     }
 
-    private static $_mRoomStatusEnum = null;
+    {%- endfor %}
+
+
+    ####################################
+    ######### enums types #########
+    ####################################
+
+    {%- for t, v in enums.items() %}
+
+    private static $_m{{ t }} = null;
 
     /**
-     * @return RoomStatusEnum
+     * {{ class_map[ t ][1].description if class_map[ t ][1].description else t }}
+     * @param array $config
+     * @param mixed $type
+     * @return {{ t }}
      */
-    public static function RoomStatusEnum()
+    public static function {{ t }}(array $config = [], $type = null)
     {
-        return self::$_mRoomStatusEnum ?: (self::$_mRoomStatusEnum = new RoomStatusEnum());
+        return self::$_m{{ t }} ?: (self::$_m{{ t }} = new {{ t }}($config, $type));
     }
 
-    private static $_mUserTypeEnum = null;
+    {%- endfor %}
+
+    ####################################
+    ######### unions types #########
+    ####################################
+
+    {%- for t, v in unions.items() %}
+
+    private static $_m{{ t }} = null;
 
     /**
-     * @return UserTypeEnum
+     * {{ class_map[ t ][1].description if class_map[ t ][1].description else t }}
+     * @param array $config
+     * @param mixed $type
+     * @return {{ t }}
      */
-    public static function UserTypeEnum()
+    public static function {{ t }}(array $config = [], $type = null)
     {
-        return self::$_mUserTypeEnum ?: (self::$_mUserTypeEnum = new UserTypeEnum());
+        return self::$_m{{ t }} ?: (self::$_m{{ t }} = new {{ t }}($config, $type));
     }
 
-    private static $_mReviewTypeEnum = null;
-
-    /**
-     * @return ReviewTypeEnum
-     */
-    public static function ReviewTypeEnum()
-    {
-        return self::$_mReviewTypeEnum ?: (self::$_mReviewTypeEnum = new ReviewTypeEnum());
-    }
-
-    private static $_mSysMsgTypeEnum = null;
-
-    /**
-     * @return SysMsgTypeEnum
-     */
-    public static function SysMsgTypeEnum()
-    {
-        return self::$_mSysMsgTypeEnum ?: (self::$_mSysMsgTypeEnum = new SysMsgTypeEnum());
-    }
-
-    private static $_mMsgStatusEnum = null;
-
-    /**
-     * @return MsgStatusEnum
-     */
-    public static function MsgStatusEnum()
-    {
-        return self::$_mMsgStatusEnum ?: (self::$_mMsgStatusEnum = new MsgStatusEnum());
-    }
+    {%- endfor %}
 
     ####################################
     ########## internal types ##########

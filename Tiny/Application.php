@@ -141,13 +141,14 @@ final class Application implements DispatchInterface, RouteInterface
      * 根据路由信息 dispatch 执行指定 Action 获得缓冲区输出 丢弃函数返回结果  会影响 $request 实例
      * @param Request $request
      * @param Response $response
-     * @param array $routeInfo
+     * @param array $routeInfo 格式为 [$module, $controller, $action] 使用当前相同 设置为空即可
      * @param array|null $params
      * @param string|null $route
      * @throws AppStartUpError
      */
-    public static function forward(Request $request, Response $response, array $routeInfo, array $params = null, $route = null)
+    public static function forward(Request $request, Response $response, array $routeInfo = [], array $params = null, $route = null)
     {
+        $routeInfo = Func::mergeNotEmpty($request->getRouteInfo(), $routeInfo);
         $app = self::app();
         // 对使用默认值 null 的参数 用当前值补全
         if (is_null($route)) {

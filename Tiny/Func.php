@@ -764,6 +764,12 @@ EOT;
         return $ret_list;
     }
 
+    /**
+     * 合并两个数组 复制 $arr2 中 非空的值到  $arr1 对应的 key
+     * @param array $arr1
+     * @param array $arr2
+     * @return array
+     */
     public static function mergeNotEmpty(array $arr1, array $arr2)
     {
         foreach ($arr2 as $key => $val) {

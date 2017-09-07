@@ -14,13 +14,13 @@ class index extends BaseDevelopController
     {
         parent::beforeAction();
         if ($this->authDevelopKey()) {  //认证 通过
-            Application::redirect(Request::urlTo($this->getRequest(), ['develop', 'syslog', 'index']));
+            Application::redirect(Request::urlTo($this->getRequest(), ['', 'syslog', 'index']));
         }
     }
 
     public function index()
     {
-        Application::app()->forward($this->getRequest(), $this->getResponse(), ['develop', 'index', 'auth']);
+        Application::forward($this->getRequest(), $this->getResponse(), ['', '', 'auth']);
     }
 
     public function auth()
@@ -29,7 +29,7 @@ class index extends BaseDevelopController
 
         $this->_setCookieDevelopKey($develop_key);
         if (self::authDevelopKey()) {  //认证 通过
-            Application::redirect(Request::urlTo($this->getRequest(), ['develop', 'syslog', 'index']));
+            Application::redirect(Request::urlTo($this->getRequest(), ['', 'syslog', 'index']));
         } else {
             $this->_showLoginBox($develop_key);
         }

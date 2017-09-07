@@ -26,7 +26,7 @@ class deploy extends BaseDevelopController
     {
         parent::beforeAction();
         if (!$this->authDevelopKey()) {  //认证 不通过
-            Application::redirect(Request::urlTo($this->getRequest(), ['develop', 'index', 'index']));
+            Application::redirect(Request::urlTo($this->getRequest(), ['', 'index', 'index']));
         }
     }
 

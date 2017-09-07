@@ -269,14 +269,15 @@ final class Request
     /**
      * 根据 路由信息 和 参数 按照路由规则生成 url
      * @param Request $request
-     * @param array $routerArr
+     * @param array $routerArr 格式为 [$module, $controller, $action] 使用当前相同 设置为空即可
      * @param array $params
      * @return string
      * @throws AppStartUpError
      */
-    public static function urlTo(Request $request, array $routerArr, array $params = [])
+    public static function urlTo(Request $request, array $routerArr = [], array $params = [])
     {
         $route = $request->getCurrentRoute();
+        $routerArr = Func::mergeNotEmpty($request->getRouteInfo(), $routerArr);
         return Application::app()->getRoute($route)->url($routerArr, $params);
     }
 
@@ -403,5 +404,13 @@ final class Request
     public function set_session($name, $data)
     {
         return $_SESSION[$name] = $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequestUri()
+    {
+        return $this->_request_uri;
     }
 }

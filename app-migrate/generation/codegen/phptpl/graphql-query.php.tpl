@@ -1,5 +1,6 @@
 <?php
 {%- set namespace = options.namespace(options.path) %}
+{%- set types_namespace = options.namespace('Types') %}
 {%- set classname = options.classname(query.name) %}
 {%- set description = query.description %}
 {%- set description = description if description else classname %}
@@ -10,6 +11,7 @@
  */
 namespace {{ namespace }};
 
+use {{ types_namespace }};
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
