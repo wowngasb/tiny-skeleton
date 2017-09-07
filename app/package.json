@@ -4,6 +4,8 @@
   "repository": "",
   "description": "fis 3.0 DEMO",
   "dependencies": {
+    "ast-types": "^0.9.12",
+    "estraverse": "^3.1.0",
     "fis3-hook-commonjs": "*",
     "fis3-hook-module": "*",
     "fis3-hook-node_modules": "*",
