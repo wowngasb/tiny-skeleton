@@ -47,7 +47,7 @@ trait OrmTrait
     private static $_db = null;
     private static $_cache_dict = [];
 
-    protected static $_orm_config = null;
+    protected static $_orm_config_map = null;
 
 
     ####################################
@@ -105,10 +105,11 @@ trait OrmTrait
      */
     protected static function getOrmConfig()
     {
-        if (is_null(static::$_orm_config)) {
-            static::$_orm_config = new OrmConfig('', '');
+        $class_name = get_called_class();
+        if (!isset(static::$_orm_config_map[$class_name])) {
+            static::$_orm_config_map[$class_name] = new OrmConfig('', '');
         }
-        return static::$_orm_config;
+        return static::$_orm_config_map[$class_name];
     }
 
     ####################################
