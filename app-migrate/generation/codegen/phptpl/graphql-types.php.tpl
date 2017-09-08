@@ -125,9 +125,9 @@ class {{ classname }}
      * @param mixed $type
      * @return {{ t }}
      */
-    public static function {{ t }}(array $config = [], $type = null)
+    public static function {{ t }}(array $config = [])
     {
-        return self::$_m{{ t }} ?: (self::$_m{{ t }} = new {{ t }}($config, $type));
+        return self::$_m{{ t }} ?: (self::$_m{{ t }} = new {{ t }}($config));
     }
 
     {%- endfor %}

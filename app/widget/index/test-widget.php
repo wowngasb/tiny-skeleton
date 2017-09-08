@@ -1,7 +1,6 @@
 <?php
 /** @var array $routeInfo */
 /** @var string $appname */
-/** @var string $webname */
 /** @var \Tiny\Request $request */
 /** @var array $tpl_vars */
 
@@ -10,7 +9,7 @@
 
 ?>
 
-<p>app:<?= $appname ?>, web:<?= htmlspecialchars($webname) ?>, route:<?= $request->getCurrentRoute() ?><p>
+<p>app:<?= $appname ?>, route:<?= $request->getCurrentRoute() ?><p>
 <h1 id="widget-test"><?= $title ?></h1>
 <?php foreach ($list as $item) { ?>
     <li><?= $item ?></li>

@@ -8,6 +8,7 @@
 
 namespace app\api\GraphQL;
 
+
 class Types extends \app\api\GraphQL_\Types
 {
 

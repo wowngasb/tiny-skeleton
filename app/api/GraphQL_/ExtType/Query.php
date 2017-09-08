@@ -22,7 +22,7 @@ class Query extends ObjectType
     {
         if (is_null($type)) {
             /** @var Types $type */
-            $type = new Types();
+            $type = Types::class;
         }
         $config = [
             'description' => "Query",

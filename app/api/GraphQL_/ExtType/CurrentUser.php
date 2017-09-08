@@ -8,9 +8,7 @@ namespace app\api\GraphQL_\ExtType;
 
 use app\api\GraphQL_\Types;
 use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Definition\ResolveInfo;
-
-/**
+use GraphQL\Type\Definition\ResolveInfo;/**
  * Class CurrentUser
  * 当前登录用户信息 及 用户连接dms配置
  * @package app\api\GraphQL_\ExtType
@@ -22,35 +20,38 @@ class CurrentUser extends ObjectType
     {
         if (is_null($type)) {
             /** @var Types $type */
-            $type = new Types();
+            $type = Types::class;
         }
-        $config = [
-            'description' => "当前登录用户信息 及 用户连接dms配置",
-            'fields' => []
-        ];
-        $config['fields']['user'] = [
-            'type' => $type::nonNull($type::BasicUser([], $type)),
-            'description' => "当前用户信息",
-        ];
-        $config['fields']['user_agent'] = [
-            'type' => $type::nonNull($type::String()),
-            'description' => "用户设备信息 PC网页 WEB 手机网页 WAP 发布工具内嵌网页 PUB 后台管理页面 MGR",
-        ];
-        $config['fields']['client_id'] = [
-            'type' => $type::nonNull($type::String()),
-            'description' => "用户连接DMS 唯一id",
-        ];
+
+        $_description = !empty($_config['description']) ? $_config['description'] : "当前登录用户信息 及 用户连接dms配置";
+        $_fields = !empty($_config['fields']) ? $_config['fields'] : [];
         
-        $config['resolveField'] = function($value, $args, $context, ResolveInfo $info) {
-            if (method_exists($this, $info->fieldName)) {
-                return $this->{$info->fieldName}($value, $args, $context, $info);
-            } else {
-                return is_array($value) ? $value[$info->fieldName] : $value->{$info->fieldName};
-            }
-        };
-        if (!empty($_config['fields'])) {
-            $config['fields'] = array_merge($_config['fields'], $config['fields']);
-        }
+        $config = [
+            'description' => $_description,
+            'fields' => function () use ($type, $_fields) {
+                $fields = [];
+                $fields['user'] = [
+                    'type' => $type::nonNull($type::BasicUser([], $type)),
+                    'description' => "当前用户信息",
+                ];
+                $fields['user_agent'] = [
+                    'type' => $type::nonNull($type::String()),
+                    'description' => "用户设备信息 PC网页 WEB 手机网页 WAP 发布工具内嵌网页 PUB 后台管理页面 MGR",
+                ];
+                $fields['client_id'] = [
+                    'type' => $type::nonNull($type::String()),
+                    'description' => "用户连接DMS 唯一id",
+                ];
+                return array_merge($fields, $_fields);
+            },
+            'resolveField' => function($value, $args, $context, ResolveInfo $info) {
+                if (method_exists($this, $info->fieldName)) {
+                    return $this->{$info->fieldName}($value, $args, $context, $info);
+                } else {
+                    return is_array($value) ? $value[$info->fieldName] : $value->{$info->fieldName};
+                }
+            },
+        ];
         parent::__construct($config);
     }
 

@@ -27,7 +27,7 @@ class {{ classname }} extends ObjectType
     {
         if (is_null($type)) {
             /** @var Types $type */
-            $type = new Types();
+            $type = Types::class;
         }
         $config = [
             'description' => {{ json.dumps(description, ensure_ascii=Flase) }},

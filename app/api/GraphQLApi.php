@@ -23,7 +23,7 @@ class GraphQLApi extends AbstractApi
     {
         // GraphQL schema to be passed to query executor:
         $schema = new Schema([
-            'query' => Types::Query()
+            'query' => Types::Query([], Types::class)
         ]);
 
         if (DEV_MODEL == 'DEBUG') {
@@ -33,7 +33,7 @@ class GraphQLApi extends AbstractApi
                 $phpErrors[] = new ErrorException($message, 0, $severity, $file, $line);
             });
         }
-        
+
         $result = [];
         try {
             $result = GraphQL::executeQuery(

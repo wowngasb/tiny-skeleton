@@ -27,7 +27,7 @@ _is_abstract_sqlalchemy = lambda v: _is_sqlalchemy(v) and \
                             hasattr(v.graphene_type._meta, 'local_fields') and \
                                 v.graphene_type._meta.local_fields
 
-_is_simple = lambda v: _is_base(v) or _is_enum(v) or _is_union(v)
+_is_simple = lambda v: _is_base(v) or _is_enum(v)
 
 def _php_namespace(base, func=lambda p: p):
     def __php_namespace(path, b=base, f=func):

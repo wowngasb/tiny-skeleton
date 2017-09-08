@@ -32,7 +32,7 @@ class SysMsgTypeEnum extends EnumType
         ];
         
         if (!empty($_config['values'])) {
-            $config['values'] = array_merge($_config['values'], $config['values']);
+            $config['values'] = array_merge($config['values'], $_config['values']);
         }
         parent::__construct($config);
     }

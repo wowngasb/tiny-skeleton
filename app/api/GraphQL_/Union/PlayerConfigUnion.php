@@ -22,7 +22,7 @@ class PlayerConfigUnion extends UnionType
     {
         if (is_null($type)) {
             /** @var Types $type */
-            $type = new Types();
+            $type = Types::class;
         }
         $config = [
             'types' => [

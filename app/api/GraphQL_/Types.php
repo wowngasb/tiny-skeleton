@@ -273,9 +273,9 @@ class Types
      * @param mixed $type
      * @return MsgStatusEnum
      */
-    public static function MsgStatusEnum(array $config = [], $type = null)
+    public static function MsgStatusEnum(array $config = [])
     {
-        return self::$_mMsgStatusEnum ?: (self::$_mMsgStatusEnum = new MsgStatusEnum($config, $type));
+        return self::$_mMsgStatusEnum ?: (self::$_mMsgStatusEnum = new MsgStatusEnum($config));
     }
 
     private static $_mUserTypeEnum = null;
@@ -286,9 +286,9 @@ class Types
      * @param mixed $type
      * @return UserTypeEnum
      */
-    public static function UserTypeEnum(array $config = [], $type = null)
+    public static function UserTypeEnum(array $config = [])
     {
-        return self::$_mUserTypeEnum ?: (self::$_mUserTypeEnum = new UserTypeEnum($config, $type));
+        return self::$_mUserTypeEnum ?: (self::$_mUserTypeEnum = new UserTypeEnum($config));
     }
 
     private static $_mMsgTypeEnum = null;
@@ -299,9 +299,9 @@ class Types
      * @param mixed $type
      * @return MsgTypeEnum
      */
-    public static function MsgTypeEnum(array $config = [], $type = null)
+    public static function MsgTypeEnum(array $config = [])
     {
-        return self::$_mMsgTypeEnum ?: (self::$_mMsgTypeEnum = new MsgTypeEnum($config, $type));
+        return self::$_mMsgTypeEnum ?: (self::$_mMsgTypeEnum = new MsgTypeEnum($config));
     }
 
     private static $_mSysMsgTypeEnum = null;
@@ -312,9 +312,9 @@ class Types
      * @param mixed $type
      * @return SysMsgTypeEnum
      */
-    public static function SysMsgTypeEnum(array $config = [], $type = null)
+    public static function SysMsgTypeEnum(array $config = [])
     {
-        return self::$_mSysMsgTypeEnum ?: (self::$_mSysMsgTypeEnum = new SysMsgTypeEnum($config, $type));
+        return self::$_mSysMsgTypeEnum ?: (self::$_mSysMsgTypeEnum = new SysMsgTypeEnum($config));
     }
 
     private static $_mReviewTypeEnum = null;
@@ -325,9 +325,9 @@ class Types
      * @param mixed $type
      * @return ReviewTypeEnum
      */
-    public static function ReviewTypeEnum(array $config = [], $type = null)
+    public static function ReviewTypeEnum(array $config = [])
     {
-        return self::$_mReviewTypeEnum ?: (self::$_mReviewTypeEnum = new ReviewTypeEnum($config, $type));
+        return self::$_mReviewTypeEnum ?: (self::$_mReviewTypeEnum = new ReviewTypeEnum($config));
     }
 
     private static $_mRoomStatusEnum = null;
@@ -338,9 +338,9 @@ class Types
      * @param mixed $type
      * @return RoomStatusEnum
      */
-    public static function RoomStatusEnum(array $config = [], $type = null)
+    public static function RoomStatusEnum(array $config = [])
     {
-        return self::$_mRoomStatusEnum ?: (self::$_mRoomStatusEnum = new RoomStatusEnum($config, $type));
+        return self::$_mRoomStatusEnum ?: (self::$_mRoomStatusEnum = new RoomStatusEnum($config));
     }
 
     ####################################
