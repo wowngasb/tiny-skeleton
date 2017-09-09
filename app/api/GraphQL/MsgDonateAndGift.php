@@ -29,6 +29,6 @@ class MsgDonateAndGift extends AbstractMsgDonateAndGift
     public function target_user($rootValue, $args, $context, ResolveInfo $info)
     {
         $target_user_id = Func::v($rootValue, 'target_user_id');
-        return BasicUserDao::getDataById($target_user_id);
+        return BasicUserDao::getOneById($target_user_id);
     }
 }

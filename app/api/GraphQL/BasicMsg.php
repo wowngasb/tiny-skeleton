@@ -33,9 +33,9 @@ class BasicMsg extends AbstractBasicMsg
         $msg_type = Func::v($rootValue, 'msg_type');
         $msg_id = Func::v($rootValue, 'msg_id');
         if ($msg_type == 'chat_and_review') {
-            return MsgChatAndReViewDao::getDataById($msg_id);
+            return MsgChatAndReViewDao::getOneById($msg_id);
         } else {
-            return MsgDonateAndGiftDao::getDataById($msg_id);
+            return MsgDonateAndGiftDao::getOneById($msg_id);
         }
     }
 
@@ -51,6 +51,6 @@ class BasicMsg extends AbstractBasicMsg
     public function user($rootValue, $args, $context, ResolveInfo $info)
     {
         $user_id = Func::v($rootValue, 'user_id');
-        return BasicUserDao::getDataById($user_id);
+        return BasicUserDao::getOneById($user_id);
     }
 }

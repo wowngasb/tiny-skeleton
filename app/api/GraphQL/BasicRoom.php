@@ -37,9 +37,9 @@ class BasicRoom extends AbstractBasicRoom
         $room_id = Func::v($rootValue, 'room_id');
         $player_type = Func::v($rootValue, 'player_type');
         if ($player_type == 'aodianplayer') {
-            return PlayerAodianConfigDao::getDataById($room_id);
+            return PlayerAodianConfigDao::getOneById($room_id);
         } else {
-            return PlayerMpsConfigDao::getDataById($room_id);
+            return PlayerMpsConfigDao::getOneById($room_id);
         }
     }
 
@@ -55,7 +55,7 @@ class BasicRoom extends AbstractBasicRoom
     public function currentUser($rootValue, $args, $context, ResolveInfo $info)
     {
         $user_id = 1000;
-        $user = BasicUserDao::getDataById($user_id);
+        $user = BasicUserDao::getOneById($user_id);
         $agent = 'WEB';
         $client_id = time() . "_{$agent}" . rand(100, 999) . "_{$user_id}";
         return [
@@ -82,12 +82,14 @@ class BasicRoom extends AbstractBasicRoom
         $page = Func::v($args, 'page', 1);
         $total = $num * ($page + 1);
         $userList = [];
+        $tmp_user_list = BasicUserDao::getManyById(range(1000, 1000 + $num));
+        error_log(json_encode($tmp_user_list));
         foreach (range(0, $num) as $idx) {
             $user_id = 1000 + $idx;
             $agent = 'WEB';
             $client_id = time() . "_{$agent}" . rand(100, 999) . "_{$user_id}";
             $userList[] = [
-                'user' => BasicUserDao::getDataById($user_id),
+                'user' => $tmp_user_list[$idx],
                 'user_agent' => $agent,
                 'client_id' => $client_id,
             ];
@@ -174,7 +176,7 @@ class BasicRoom extends AbstractBasicRoom
     public function chatConfig($rootValue, $args, $context, ResolveInfo $info)
     {
         $room_id = Func::v($rootValue, 'room_id');
-        return ChatConfigDao::getDataById($room_id);
+        return ChatConfigDao::getOneById($room_id);
     }
 
     /**

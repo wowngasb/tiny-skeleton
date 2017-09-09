@@ -30,7 +30,7 @@ class MsgChatAndReView extends AbstractMsgChatAndReView
     public function target_user($rootValue, $args, $context, ResolveInfo $info)
     {
         $target_user_id = Func::v($rootValue, 'target_user_id');
-        return BasicUserDao::getDataById($target_user_id);
+        return BasicUserDao::getOneById($target_user_id);
     }
 
     /**
@@ -45,7 +45,7 @@ class MsgChatAndReView extends AbstractMsgChatAndReView
     public function target_msg($rootValue, $args, $context, ResolveInfo $info)
     {
         $target_msg_id = Func::v($rootValue, 'target_msg_id');
-        return BasicMsgDao::getDataById($target_msg_id);
+        return BasicMsgDao::getOneById($target_msg_id);
     }
 
     /**
@@ -60,6 +60,6 @@ class MsgChatAndReView extends AbstractMsgChatAndReView
     public function operator($rootValue, $args, $context, ResolveInfo $info)
     {
         $operator_id = Func::v($rootValue, 'operator_id');
-        return BasicUserDao::getDataById($operator_id);
+        return BasicUserDao::getOneById($operator_id);
     }
 }

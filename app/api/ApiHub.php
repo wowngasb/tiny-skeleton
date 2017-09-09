@@ -82,7 +82,7 @@ class ApiHub extends AbstractApi
 
     public function testOrm($room_id = 101)
     {
-        $roomInfo = BasicRoomDao::getDataById($room_id, 0);
+        $roomInfo = BasicRoomDao::getOneById($room_id, 0);
         return ['room' => $roomInfo];
     }
 

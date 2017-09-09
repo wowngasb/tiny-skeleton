@@ -9,15 +9,14 @@
 namespace app\api\base;
 
 
-
 use Tiny\Traits\OrmTrait;
 
-class BaseDao extends  BaseModel
+class BaseDao extends BaseModel
 {
 
     use OrmTrait;
 
-    protected static $cache_time = 0;
+    protected static $cache_time = 5;
     protected static $max_select = 5000;
 
 }

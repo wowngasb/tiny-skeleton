@@ -34,7 +34,7 @@ class Query extends AbstractQuery
     {
         // $room_id = Func::v($args, 'room_id');
         $user_id = Func::v($args, 'user_id');
-        $tmp = BasicUserDao::getItem($user_id);
+        $tmp = BasicUserDao::getOneById($user_id);
         return $tmp;
     }
 
@@ -51,7 +51,7 @@ class Query extends AbstractQuery
     public function room($rootValue, $args, $context, ResolveInfo $info)
     {
         $room_id = Func::v($args, 'room_id');
-        return BasicRoomDao::getDataById($room_id);
+        return BasicRoomDao::getOneById($room_id);
     }
 
     /**
@@ -67,6 +67,6 @@ class Query extends AbstractQuery
     public function msg($rootValue, $args, $context, ResolveInfo $info)
     {
         $msg_id = Func::v($args, 'msg_id');
-        return BasicMsgDao::getDataById($msg_id);
+        return BasicMsgDao::getOneById($msg_id);
     }
 }

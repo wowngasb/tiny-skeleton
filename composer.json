@@ -20,7 +20,9 @@
     "webonyx/graphql-php": "^0.10",
     "phpFastCache/phpFastCache": "^5.0",
     "illuminate/database": "5.2.*",
-    "guzzlehttp/guzzle": "^6.3"
+    "guzzlehttp/guzzle": "^6.3",
+    "overblog/dataloader-php": "^0.5.2",
+    "react/promise": "^2.4"
   },
   "require-dev": {
     "php-console/php-console": "^3.1",

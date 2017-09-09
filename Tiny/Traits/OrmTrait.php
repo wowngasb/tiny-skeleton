@@ -112,6 +112,7 @@ trait OrmTrait
         return static::$_orm_config_map[$class_name];
     }
 
+
     ####################################
     ############ 可重写方法 #############
     ####################################
@@ -122,24 +123,24 @@ trait OrmTrait
      * @param null $timeCache
      * @return array|null
      */
-    public static function getDataById($id, $timeCache = null)
+    public static function getOneById($id, $timeCache = null)
     {
         $cfg = static::getOrmConfig();
         $cache_time = $cfg->cache_time;
         $db_name = $cfg->db_name;
         $table_name = $cfg->table_name;
         $primary_key = $cfg->primary_key;
-
         $timeCache = is_null($timeCache) ? $cache_time : intval($timeCache);
-        $id = intval($id);
-        if ($id <= 0) {
+
+        if (empty($id)) {
             return [];
-        }
-        if (isset(self::$_cache_dict[$id])) {
-            return self::$_cache_dict[$id];
         }
         $tag = "{$primary_key}={$id}";
         $table = "{$db_name}.{$table_name}";
+        self::$_cache_dict[$table] = !empty(self::$_cache_dict[$table]) ? self::$_cache_dict[$table] : [];
+        if ($timeCache > 0 && isset(self::$_cache_dict[$table][$tag])) {
+            return self::$_cache_dict[$table][$tag];
+        }
         $data = CacheTrait::_cacheDataManager($table, $tag, function () use ($id) {
             $tmp = static::getItem($id);
             return $tmp;
@@ -147,7 +148,65 @@ trait OrmTrait
             return !empty($data);
         }, $timeCache, false, static::$_REDIS_PREFIX_DB, ["{$table}?$tag",]);
 
+        if (!empty($data)) {
+            self::$_cache_dict[$table][$tag] = $data;
+        }
         return $data;
+    }
+
+    /**
+     * 根据主键获取多个数据 自动使用缓存
+     * @param array $id_list
+     * @param null $timeCache
+     * @return array
+     */
+    public static function getManyById(array $id_list, $timeCache = null)
+    {
+        if (empty($id_list)) {
+            return [];
+        }
+        if (count($id_list) == 1) {
+            return [static::getOneById($id_list[0], $timeCache)];
+        }
+        $cfg = static::getOrmConfig();
+        $cache_time = $cfg->cache_time;
+        $db_name = $cfg->db_name;
+        $table_name = $cfg->table_name;
+        $primary_key = $cfg->primary_key;
+        $table = "{$db_name}.{$table_name}";
+        $timeCache = is_null($timeCache) ? $cache_time : intval($timeCache);
+
+        $no_cache_list = [];
+        $cache_dict = [];
+        if ($timeCache > 0) {
+            self::$_cache_dict[$table] = !empty(self::$_cache_dict[$table]) ? self::$_cache_dict[$table] : [];
+            foreach ($id_list as $id) {
+                $tag = "{$primary_key}={$id}";
+                if (!empty(self::$_cache_dict[$table][$tag])) {
+                    $cache_dict[$id] = self::$_cache_dict[$table][$tag];
+                } else {
+                    $no_cache_list[] = $id;
+                }
+            }
+        } else {
+            $no_cache_list = $id_list;
+        }
+
+        if (!empty($no_cache_list)) {
+            $tmp_dict = self::dictItem([$primary_key => $no_cache_list]);
+            $cache_dict = $tmp_dict + $cache_dict;
+        }
+        $ret_list = [];
+        foreach ($id_list as $id) {
+            if (!empty($cache_dict[$id])) {
+                $ret_list[] = $cache_dict[$id];
+                $tag = "{$primary_key}={$id}";
+                self::$_cache_dict[$table][$tag] = $cache_dict[$id];
+            } else {
+                $ret_list[] = null;
+            }
+        }
+        return $ret_list;
     }
 
     /**
@@ -158,14 +217,13 @@ trait OrmTrait
      */
     public static function setDataById($id, array $data)
     {
-        $id = intval($id);
         if ($id <= 0) {
             return [];
         }
         if (!empty($data)) {
             static::getItem($id, $data);
         }
-        return self::getDataById($id, 0);
+        return self::getOneById($id, 0);
     }
 
     /**
@@ -177,7 +235,7 @@ trait OrmTrait
     {
         if (!empty($data)) {
             $id = static::newItem($data);
-            return self::getDataById($id, 0);
+            return self::getOneById($id, 0);
         } else {
             return [];
         }
@@ -231,7 +289,7 @@ trait OrmTrait
      */
     public static function getFiledById($name, $id, $default = null)
     {
-        $tmp = self::getDataById($id);
+        $tmp = self::getOneById($id);
         return isset($tmp[$name]) ? $tmp[$name] : $default;
     }
 

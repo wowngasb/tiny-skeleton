@@ -29,6 +29,6 @@ class ContentTabConfig extends AbstractContentTabConfig
     public function tabList($rootValue, $args, $context, ResolveInfo $info)
     {
         $content_tab_id = Func::v($rootValue, 'content_tab_id');
-        return TabItemConfigDao::getDataById($content_tab_id);
+        return TabItemConfigDao::getOneById($content_tab_id);
     }
 }
