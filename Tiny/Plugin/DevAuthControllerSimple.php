@@ -20,6 +20,18 @@ class DevAuthControllerSimple extends ControllerSimple
     private static $_SVR_DEVELOP_KEY = 'develop_key';
     private static $_SVR_DEVELOP_EXPIRY = 86400; //24小时
 
+    protected function sendFile($file_path)
+    {
+        $content_type = Func::mime_content_type($file_path);
+        if (!is_file($file_path)) {
+            $this->response->addHeader("Content-Type:{$content_type}", true, 404);
+        } elseif (!is_readable($file_path)) {
+            $this->response->addHeader("Content-Type:{$content_type}", true, 403);
+        } else {
+            $this->response->addHeader("Content-Type:{$content_type}", true, 200);
+            $this->response->appendBody(file_get_contents($file_path));
+        }
+    }
 
     protected function _showLoginBox($develop_key)
     {
@@ -57,9 +69,10 @@ EOT;
         return $develop_key;
     }
 
-    protected function _checkRequestDevelopKeyToken(){
+    protected function _checkRequestDevelopKeyToken()
+    {
         $dev_token = $this->_request('dev_token', '');
-        if(!empty($dev_token)){
+        if (!empty($dev_token)) {
             $crypt_key = Application::app()->getEnv('ENV_CRYPT_KEY');
             $develop_key = Func::decode($dev_token, $crypt_key);
             $develop_key && $this->_setCookieDevelopKey($develop_key);

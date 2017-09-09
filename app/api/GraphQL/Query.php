@@ -35,7 +35,6 @@ class Query extends AbstractQuery
         // $room_id = Func::v($args, 'room_id');
         $user_id = Func::v($args, 'user_id');
         $tmp = BasicUserDao::getItem($user_id);
-        error_log("user_id:{$user_id}" . json_encode($tmp));
         return $tmp;
     }
 

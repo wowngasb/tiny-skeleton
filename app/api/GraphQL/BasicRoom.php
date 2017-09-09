@@ -37,9 +37,9 @@ class BasicRoom extends AbstractBasicRoom
         $room_id = Func::v($rootValue, 'room_id');
         $player_type = Func::v($rootValue, 'player_type');
         if ($player_type == 'aodianplayer') {
-            PlayerAodianConfigDao::getDataById($room_id);
+            return PlayerAodianConfigDao::getDataById($room_id);
         } else {
-            PlayerMpsConfigDao::getDataById($room_id);
+            return PlayerMpsConfigDao::getDataById($room_id);
         }
     }
 
@@ -60,7 +60,7 @@ class BasicRoom extends AbstractBasicRoom
         $client_id = time() . "_{$agent}" . rand(100, 999) . "_{$user_id}";
         return [
             'user' => $user,
-            'agent' => $agent,
+            'user_agent' => $agent,
             'client_id' => $client_id,
         ];
     }
@@ -88,7 +88,7 @@ class BasicRoom extends AbstractBasicRoom
             $client_id = time() . "_{$agent}" . rand(100, 999) . "_{$user_id}";
             $userList[] = [
                 'user' => BasicUserDao::getDataById($user_id),
-                'agent' => $agent,
+                'user_agent' => $agent,
                 'client_id' => $client_id,
             ];
         }

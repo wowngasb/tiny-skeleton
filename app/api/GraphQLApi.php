@@ -11,6 +11,7 @@ namespace app\api;
 use app\api\GraphQL\Types;
 use ErrorException;
 
+use GraphQL\Error\Debug;
 use GraphQL\Type\Schema;
 use \GraphQL\GraphQL;
 use \GraphQL\Error\FormattedError;
@@ -25,13 +26,14 @@ class GraphQLApi extends AbstractApi
         $schema = new Schema([
             'query' => Types::Query([], Types::class)
         ]);
-
+        $debug = false;
         if (DEV_MODEL == 'DEBUG') {
             $schema->assertValid(); // Enable additional validation of type configs (disabled by default because it is costly)
             $phpErrors = [];  // Catch custom errors (to report them in query results if debugging is enabled)
             set_error_handler(function ($severity, $message, $file, $line) use (&$phpErrors) {
                 $phpErrors[] = new ErrorException($message, 0, $severity, $file, $line);
             });
+            $debug = Debug::INCLUDE_DEBUG_MESSAGE | Debug::INCLUDE_TRACE;
         }
 
         $result = [];
@@ -42,7 +44,7 @@ class GraphQLApi extends AbstractApi
                 null,
                 $this,
                 $variables
-            )->toArray();
+            )->toArray($debug);
 
             // Add reported PHP errors to result (if any)
             if (DEV_MODEL == 'DEBUG' && !empty($phpErrors)) {

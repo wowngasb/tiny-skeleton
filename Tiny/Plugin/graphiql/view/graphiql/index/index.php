@@ -10,6 +10,7 @@
 <head>
     <title><?= htmlspecialchars($tool_title)?></title>
     <link rel="stylesheet" href="<?= \Tiny\Request::urlTo($request, ['', 'assets', 'graphiql.css']) ?>"/>
+
     <script src="<?= \Tiny\Request::urlTo($request, ['', 'assets', 'fetch.min.js']) ?>"></script>
     <script src="<?= \Tiny\Request::urlTo($request, ['', 'assets', 'react.min.js']) ?>"></script>
     <script src="<?= \Tiny\Request::urlTo($request, ['', 'assets', 'react-dom.min.js']) ?>"></script>
@@ -20,7 +21,7 @@
 <body>
 <div style="height: 100%">
     <div id="graphql-token" style="height: 30px;margin-left: 20px;line-height: 30px;">
-        Token:<input type="text" name="token" onchange="token = this.value;" style="width: 200px">
+        <label >Token:<input type="text" name="token" style="width: 200px"></label>
     </div>
     <div id="graphql-box" ></div>
 </div>
@@ -28,9 +29,6 @@
     $(function(){
         $('#graphql-box').height( $('body').height() - $('#graphql-token').height() );
     });
-
-    var token = '';
-    var serverUri = location.protocol + '//' + location.host + '/api/GraphQLApi/exec';
 
     // Parse the search string to get url parameters.
     var search = window.location.search;
@@ -75,9 +73,9 @@
     }
 
     function replaceAll(str, s1, s2){
-        if( typeof s1 == 'string' && typeof s2 == 'string' ){
+        if( typeof s1 === 'string' && typeof s2 === 'string' ){
             str = str.replace(new RegExp(s1, "gm"), s2);
-        } else if( typeof s1 == 'object' && typeof s2 == 'object' ) {
+        } else if( typeof s1 === 'object' && typeof s2 === 'object' ) {
             var len = s1.length <= s2.length ? s1.length : s2.length;
             for(var idx = 0; idx < len; idx++){
                 str = str.replace(new RegExp(s1[idx], "gm"), s2[idx]);
@@ -90,10 +88,10 @@
     // Defines a GraphQL fetcher using the fetch API.
     function graphQLFetcher(graphQLParams) {
         graphQLParams.query = replaceAll(graphQLParams.query, ["\n"], [""]);
-        if( graphQLParams.variables && typeof graphQLParams.variables == 'string'){
+        if( graphQLParams.variables && typeof graphQLParams.variables === 'string'){
             graphQLParams.variables = JSON.parse(graphQLParams.variables);
         }
-        graphQLParams.token = token;
+        graphQLParams.token = $('input[name=token]').val();
         return new Promise(function (resolve, reject) {
             dmsObj.api_ajax(
                 location.hostname,
@@ -103,7 +101,7 @@
                     resolve(res);
                 },
                 function (error) {
-                    reject(error);
+                    resolve(error);
                 }
             );
         });

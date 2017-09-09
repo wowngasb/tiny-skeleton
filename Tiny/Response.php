@@ -1,4 +1,5 @@
 <?php
+
 namespace Tiny;
 
 use Tiny\Exception\AppStartUpError;
@@ -18,16 +19,17 @@ final class Response
     /**
      * 添加响应header
      * @param string $string
-     * @param bool $replace
+     * @param bool $replace [optional]
+     * @param int $http_response_code [optional]
      * @return $this
      * @throws \Exception HeaderError
      */
-    public function addHeader($string, $replace = true)
+    public function addHeader($string, $replace = true, $http_response_code = null)
     {
         if ($this->_is_header_send) {
             throw new AppStartUpError('header has been send');
         }
-        $this->_header_list[] = [$string, $replace];
+        $this->_header_list[] = [$string, $replace, $http_response_code];
         return $this;
     }
 
@@ -62,7 +64,7 @@ final class Response
             throw new AppStartUpError('header has been send');
         }
         foreach ($this->_header_list as $idx => $val) {
-            header($val[0], $val[1]);
+            header($val[0], $val[1], $val[2]);
         }
         http_response_code($this->_code);
         $this->_is_header_send = true;
@@ -92,8 +94,8 @@ final class Response
         if (!$this->_is_header_send) {
             $this->sendHeader();
         }
-        foreach($this->_body as $name => $body){
-            foreach($body as $idx => $msg){
+        foreach ($this->_body as $name => $body) {
+            foreach ($body as $idx => $msg) {
                 echo $msg;
             }
         }
@@ -107,7 +109,7 @@ final class Response
      */
     public function getBody($name = null)
     {
-        if( is_null($name) ){
+        if (is_null($name)) {
             return $this->_body;
         }
         return isset($this->_body[$name]) ? $this->_body[$name] : [];
@@ -119,7 +121,7 @@ final class Response
      */
     public function clearBody($name = null)
     {
-        if( is_null($name) ){
+        if (is_null($name)) {
             $this->_body = [];
         }
         unset($this->_body[$name]);
