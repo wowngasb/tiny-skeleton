@@ -1,6 +1,7 @@
-# coding: utf-8
+#-*- coding: utf-8 -*-
 import os
-from app import BuildPHP, BuildGO, BuildJAVA, schema, tables
+from app import schema, tables
+from pykl.tiny.codegen import BuildPHP, BuildGO, BuildJAVA
 
 def main():
     _output = lambda tag: os.path.join(os.getcwd(), 'output', tag)

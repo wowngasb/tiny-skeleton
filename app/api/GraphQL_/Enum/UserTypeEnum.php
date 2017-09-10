@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by table_graphQL.
- * User: Administrator
+ * 用于PHP Tiny框架
  * Date: 2017-09
  */
 namespace app\api\GraphQL_\Enum;

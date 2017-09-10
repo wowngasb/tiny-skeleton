@@ -1,7 +1,7 @@
 # coding: utf-8
 
 
-from dumptable import CodeGenerator, get_db_doc, cmd_main
+from pykl.tiny.dumptable import cmd_main
 
 def main():
     cmd_main()

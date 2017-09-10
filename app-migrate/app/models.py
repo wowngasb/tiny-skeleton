@@ -7,9 +7,9 @@ from sqlalchemy.inspection import inspect as sqlalchemyinspect
 
 import graphene as g
 
-from grapheneinfo import BuildType, SQLAlchemyObjectType, List, NonNull, Field, _is_graphql, _is_graphql_cls
+from pykl.tiny.grapheneinfo import BuildType, SQLAlchemyObjectType, List, NonNull, Field, _is_graphql, _is_graphql_cls
 
-from grapheneinfo.utils import (
+from pykl.tiny.grapheneinfo.utils import (
     HiddenField,
     InitializeField,
     EditableField,

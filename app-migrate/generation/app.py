@@ -3,7 +3,7 @@ import os
 import sys
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_graphql import GraphQLView
+
 
 app = Flask(__name__)
 app.config.setdefault('SQLALCHEMY_TRACK_MODIFICATIONS', True)
@@ -15,4 +15,4 @@ import models
 schema = models.schema
 tables = models.tables
 
-from codegen import BuildPHP, BuildGO, BuildJAVA
+
