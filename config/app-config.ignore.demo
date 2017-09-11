@@ -2,7 +2,7 @@
 !defined('ROOT_PATH') && define("ROOT_PATH", dirname(__DIR__) . DIRECTORY_SEPARATOR);
 
 if (!defined('DEV_MODEL')) {
-    require(ROOT_PATH . 'vendor/autoload.php');
+    require_once(ROOT_PATH . 'vendor/autoload.php');
     ini_set('display_errors', 0);
     ini_set('log_errors', 1);
     date_default_timezone_set('Asia/Shanghai');
