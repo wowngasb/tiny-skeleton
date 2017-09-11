@@ -2,13 +2,10 @@
 
 namespace app;
 
-use app\api\base\BaseDao;
 use Tiny\Abstracts\AbstractBootstrap;
 use Tiny\Application;
 use Tiny\OrmQuery\OrmConfig;
 use Tiny\Plugin\graphiql\dispatch\GraphiQLDispatch;
-use Tiny\Request;
-use Tiny\Response;
 use Tiny\Route\RouteMap;
 use Tiny\Dispatch\ApiDispatch;
 use Tiny\Plugin\develop\dispatch\DevelopDispatch;
