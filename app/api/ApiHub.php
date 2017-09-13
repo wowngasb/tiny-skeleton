@@ -91,4 +91,9 @@ class ApiHub extends AbstractApi
         return ['list' => $list];
     }
 
+    public function testPluck2(){
+        $list = BasicRoomDao::tableItem()->pluck('room_id', 'chat_topic');
+        return ['list' => $list];
+    }
+
 }
