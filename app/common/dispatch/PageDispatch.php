@@ -52,7 +52,7 @@ class PageDispatch implements DispatchInterface
         $controller = (!empty($routeInfo[1]) ? Func::trimlower($routeInfo[1]) : 'index') . 'Controller';
         $module = !empty($routeInfo[0]) ? Func::trimlower($routeInfo[0]) : 'index';
 
-        return "\\" . Func::joinNotEmpty("\\", [Application::app()->getName(), $module, $controller]);
+        return "\\" . Func::joinNotEmpty("\\", [Application::app()->getAppName(), $module, $controller]);
     }
 
     /**

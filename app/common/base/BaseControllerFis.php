@@ -15,15 +15,18 @@ use Tiny\Func;
 
 class BaseControllerFis extends ControllerFis
 {
-    public function beforeAction()
+    public function beforeAction(array $params)
     {
-        parent::beforeAction();
-        $appname = Application::app()->getName();
+        $params = parent::beforeAction($params);
+
+        $appname = Application::app()->getAppName();
         $config_dir = ROOT_PATH . Func::joinNotEmpty(DIRECTORY_SEPARATOR, ["{$appname}-public", 'tpl']);
         $template_dir = ROOT_PATH . Func::joinNotEmpty(DIRECTORY_SEPARATOR, ["{$appname}-public", 'tpl']);
         $this->setFisReleasePath($config_dir, $template_dir);
         $env_web = Application::app()->getEnv('ENV_WEB', []);
         $this->assign('webname', !empty($env_web['name']) ? $env_web['name'] : '');
+
+        return $params;
     }
 
 }
