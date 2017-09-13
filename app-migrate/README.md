@@ -42,6 +42,12 @@ use like this
 python db2model.py mysql://username:password@dbhost:dbport/dbname?charset=gbk > models.py
 ```
 
+demo
+```
+python db2model.py mysql://root:@127.0.0.1:3306/test?charset=utf8 > models.py
+```
+
+
 # Migrate
 
 This is a database migration repository.
