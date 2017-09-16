@@ -1,21 +1,21 @@
 <?php
-!defined('ROOT_PATH') && define("ROOT_PATH", dirname(__DIR__) . DIRECTORY_SEPARATOR);
 
-if (!defined('DEV_MODEL')) {
-    require_once(ROOT_PATH . 'vendor/autoload.php');
+if (!defined('ROOT_PATH')) {
+    // 定义 ROOT_PATH 会辅助 Tiny 框架找到项目根目录
+    define("ROOT_PATH", dirname(__DIR__) . DIRECTORY_SEPARATOR);
+
+    //define('XHPROF', 'XHPROF:CPU+MEMORY+BUILTINS');  //开启XHPROF性能分析
+    define('PLUGIN_PATH', ROOT_PATH . 'plugin' . DIRECTORY_SEPARATOR);
+    define('SYSTEM_HOST', (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" ? 'https://' : 'http://') . (isset($_SERVER['HTTP_HOST']) ? "{$_SERVER['HTTP_HOST']}/" : 'localhost/'));  //SYSTEM_HOST 常量
+
     ini_set('display_errors', 0);
     ini_set('log_errors', 1);
     date_default_timezone_set('Asia/Shanghai');
-
-    define('DEV_MODEL', 'DEBUG');  //开发模式  DEBUG 调试  PRODUCT 产品
-    //define('XHPROF', 'XHPROF:CPU+MEMORY+BUILTINS');  //开启XHPROF性能分析
-
-    define('PLUGIN_PATH', ROOT_PATH . 'plugin' . DIRECTORY_SEPARATOR);
-    define('SYSTEM_HOST', (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" ? 'https://' : 'http://') . (isset($_SERVER['HTTP_HOST']) ? "{$_SERVER['HTTP_HOST']}/" : 'my.app/'));  //SYSTEM_HOST 常量
 }
 
 
 return [
+    'ENVIRON' => 'debug',
     'ENV_LOG' => [
         'path' => ROOT_PATH . 'logs' . DIRECTORY_SEPARATOR,  //日志文件存放地址
         'level' => 'DEBUG',  //日志记录级别  ['ALL' => 0, 'DEBUG' => 10, 'INFO' => 20, 'WARN' => 30, 'ERROR' => 40, 'FATAL' => 50, 'OFF' => 60,]
@@ -41,38 +41,9 @@ return [
         'username' => 'root',
         'password' => '',
     ],
-    'ENV_CRYPT_KEY' => 'key',
-    'ENV_DEVELOP_KEY' => 'dev',
+    'ENV_CRYPT_KEY' => '',
+    'ENV_DEVELOP_KEY' => '',
+    'ENV_WEB' => [
+        'name' => 'Tiny Demo'
+    ]
 ];
-
-/*
-return [
-    'ENV_LOG' => [
-        'path' => ROOT_PATH . 'logs' . DIRECTORY_SEPARATOR,  //日志文件存放地址
-        'level' => 'DEBUG',  //日志记录级别  ['ALL' => 0, 'DEBUG' => 10, 'INFO' => 20, 'WARN' => 30, 'ERROR' => 40, 'FATAL' => 50, 'OFF' => 60,]
-    ],
-    'ENV_CACHE' => [
-        'type' => 'redis',
-        'config' => [
-            'host' => '127.0.0.1',
-            'port' => 6379,
-            'password' => '',
-            'database' => '',    //可省略
-            'timeout' => 0,    //可省略
-        ]
-        // 或者  ['type'=>'files', 'config'=>[ 'path' => ROOT_PATH . 'cache' . DIRECTORY_SEPARATOR ] ]
-    ],
-    'ENV_DB' => [
-        'driver' => 'mysql',
-        'host' => '127.0.0.1',
-        'database' => 'weixinzhibo',
-        'username' => 'root',
-        'password' => '',
-        'charset' => 'utf8',   //可省略
-        'collation' => 'utf8_unicode_ci',    //可省略
-        'prefix' => '',    //可省略
-    ],
-    'ENV_CRYPT_KEY' => '!tiny@crypt#key&never*tell(others)',
-    'ENV_DEVELOP_KEY' => 'tinydev',
-];
- */

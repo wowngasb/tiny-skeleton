@@ -23,7 +23,7 @@ final class Bootstrap extends AbstractBootstrap
      */
     public static function bootstrap($appname, Application $app)
     {
-        if ($app->isBootstrapCompleted()) {
+        if ($app->getBootstrapCompleted()) {
             return $app;
         }
         $app->addRoute('api', new RouteMap('/api', 'api', ['api', 'ApiHub', 'hello']), new ApiDispatch())
@@ -31,11 +31,13 @@ final class Bootstrap extends AbstractBootstrap
             ->addRoute('graphiql', new RouteMap('/graphiql', 'graphiql', ['graphiql', 'index', 'index']), new GraphiQLDispatch())
             ->addRoute('page', new RouteMap('/'), new PageDispatch());  // 添加默认简单路由
 
-        OrmConfig::on('runSql', function($obj, $sql_str, $time, $_tag){
+
+        OrmConfig::on('runSql', function ($obj, $sql_str, $time, $_tag) {
             false && func_get_args();
             $time_str = round($time, 3) * 1000;
             static::debugConsole("{$sql_str} <{$time_str}ms>", $_tag, 1);
         });
+        
         return parent::bootstrap($appname, $app);
     }
 

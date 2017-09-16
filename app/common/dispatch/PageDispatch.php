@@ -12,8 +12,8 @@ namespace app\common\dispatch;
 use Exception;
 use Tiny\Abstracts\AbstractContext;
 use Tiny\Application;
-use Tiny\DispatchInterface;
 use Tiny\Func;
+use Tiny\Interfaces\DispatchInterface;
 use Tiny\Request;
 use Tiny\Response;
 
@@ -65,7 +65,7 @@ class PageDispatch implements DispatchInterface
      */
     public static function initMethodContext(Request $request, Response $response, $namespace, $action)
     {
-        $request->setSessionStart(true);  // 开启 session
+        $request->session_start($response);  // 开启 session
         return Application::initMethodContext($request, $response, $namespace, $action);
     }
 
