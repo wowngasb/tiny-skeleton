@@ -8,7 +8,7 @@ var basedir = __dirname;
 var PHP_CONFIG = {};
 
 !(function () {
-    config_dir = path.join(path.resolve(__dirname, '..'), 'config')
+    config_dir = path.join(path.resolve(basedir, '..'), 'config')
     dump = path.join(config_dir, 'dumpjson.php')
     config = path.join(config_dir, 'app-config.ignore.php')
     var last = exec(`php ${dump} ${config}`);
@@ -18,6 +18,33 @@ var PHP_CONFIG = {};
     });
 })();
 
+function autoBuildApi(options, modified, total, next) {
+    var try_build_api = true;
+    for(var i=0; i< modified.length; i++){
+        if(modified[i].fullname.match(/\/api\/\w+\.js/)){ try_build_api = false; break; }
+    }
+    var dev_token = nodekl.encode(PHP_CONFIG['ENV_DEVELOP_KEY'], PHP_CONFIG['ENV_CRYPT_KEY']);
+    try_build_api && dev_token && !(function(){
+        console.log('\nbuild api js');
+        setTimeout(function (){
+            http.get("http://tiny.app/develop/deploy/buildapimodjs?dev_debug=1&dev_token=" + dev_token, function(res) {
+                console.log("Build API js response: " + res.statusCode);
+            }).on('error', function(e) {
+                console.log("Build API js error: " + e.message);
+            });
+        }, 1000);
+    })();
+    next && next(); //由于是异步的如果后续还需要执行必须调用 next
+}
+
+fis.match('*', {
+    deploy: [
+        autoBuildApi,
+        fis.plugin('local-deliver', {
+            to: './../app-public'
+        })
+    ]
+});
 
 fis.hook('module', {
     mode: 'commonjs'
@@ -83,35 +110,6 @@ fis.match("/{view,widget}/**.php", {
 //开启组件同名依赖
 fis.match('*.{html,js,php}', {
     useSameNameRequire: true
-});
-
-fis.match('*', {
-    deploy: [
-        function(options, modified, total, next) {
-            var try_build_api = true;
-            for(var i=0; i< modified.length; i++){
-                if(modified[i].fullname.match(/\/api\/\w+\.js/)){
-                    try_build_api = false;
-                    break;
-                }
-            }
-            var dev_token = nodekl.encode(PHP_CONFIG['ENV_DEVELOP_KEY'], PHP_CONFIG['ENV_CRYPT_KEY']);
-            try_build_api && dev_token && !(function(){
-                console.log('\nbuild api js');
-                setTimeout(function (){
-                    http.get("http://tiny.app/develop/deploy/buildapimodjs?dev_debug=1&dev_token=" + dev_token, function(res) {
-                        console.log("Build API js response: " + res.statusCode);
-                    }).on('error', function(e) {
-                        console.log("Build API js error: " + e.message);
-                    });
-                }, 1000);
-            })();
-            next && next(); //由于是异步的如果后续还需要执行必须调用 next
-        },
-        fis.plugin('local-deliver', {
-            to: './../app-public'
-        })
-    ]
 });
 
 /*
