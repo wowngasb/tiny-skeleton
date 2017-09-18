@@ -17,11 +17,10 @@ final class Bootstrap extends AbstractBootstrap
     /** 在app run 之前, 设置app 命名空间 并 注册路由
      *  #param Application $app
      *  #return Application
-     * @param string $appname
      * @param Application $app
      * @return Application
      */
-    public static function bootstrap($appname, Application $app)
+    public static function bootstrap(Application $app)
     {
         if ($app->getBootstrapCompleted()) {
             return $app;
@@ -38,7 +37,7 @@ final class Bootstrap extends AbstractBootstrap
             static::debugConsole("{$sql_str} <{$time_str}ms>", $_tag, 1);
         });
         
-        return parent::bootstrap($appname, $app);
+        return parent::bootstrap($app);
     }
 
 }

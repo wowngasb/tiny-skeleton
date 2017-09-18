@@ -13,7 +13,7 @@
 
 function ApiHubHelper(){
     var _this = this;
-    this.DEBUG = true;
+    this.DEBUG = 1;
     var _log_func = (typeof console != "undefined" && typeof console.info == "function" && typeof console.warn == "function") ? {INFO: console.info.bind(console), ERROR: console.warn.bind(console)} : {};
     
     var _formatDate = function(){
@@ -109,6 +109,28 @@ function ApiHubHelper(){
         return _rfcApi('POST', '/api/ApiHub/testOrm' ,args, success, error, log);
     };
     this.testOrm_args = {"room_id":101};
+
+    
+    this.testPluck = function(args, success, error) {
+        args = args || {};
+        var log = function(tag, use_time, args, data){
+            var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
+            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.testPluck('+use_time+'ms)', 'args:', args, 'data:', data);
+        };
+        return _rfcApi('POST', '/api/ApiHub/testPluck' ,args, success, error, log);
+    };
+    this.testPluck_args = null;
+
+    
+    this.testPluck2 = function(args, success, error) {
+        args = args || {};
+        var log = function(tag, use_time, args, data){
+            var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
+            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.testPluck2('+use_time+'ms)', 'args:', args, 'data:', data);
+        };
+        return _rfcApi('POST', '/api/ApiHub/testPluck2' ,args, success, error, log);
+    };
+    this.testPluck2_args = null;
 }
 
 /*  */

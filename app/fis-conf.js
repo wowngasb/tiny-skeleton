@@ -1,6 +1,23 @@
 //模块化方案，本项目选中CommonJS方案(同样支持异步加载哈)
 var http = require('http');
 var nodekl = require('nodekl');
+var path = require("path");
+var exec = require('child_process').exec;
+
+var basedir = __dirname;
+var PHP_CONFIG = {};
+
+!(function () {
+    config_dir = path.join(path.resolve(__dirname, '..'), 'config')
+    dump = path.join(config_dir, 'dumpjson.php')
+    config = path.join(config_dir, 'app-config.ignore.php')
+    var last = exec(`php ${dump} ${config}`);
+
+    last.stdout.on('data', function (output) {
+        PHP_CONFIG = output ? JSON.parse(output) : {};
+    });
+})();
+
 
 fis.hook('module', {
     mode: 'commonjs'
@@ -78,7 +95,7 @@ fis.match('*', {
                     break;
                 }
             }
-            var dev_token = nodekl.encode('dev', 'key');
+            var dev_token = nodekl.encode(PHP_CONFIG['ENV_DEVELOP_KEY'], PHP_CONFIG['ENV_CRYPT_KEY']);
             try_build_api && dev_token && !(function(){
                 console.log('\nbuild api js');
                 setTimeout(function (){

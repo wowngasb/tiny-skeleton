@@ -1,3 +1,2 @@
 *.ignore.php
-*.ignore.json
 !.gitignore

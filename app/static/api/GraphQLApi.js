@@ -13,7 +13,7 @@
 
 function GraphQLApiHelper(){
     var _this = this;
-    this.DEBUG = true;
+    this.DEBUG = 1;
     var _log_func = (typeof console != "undefined" && typeof console.info == "function" && typeof console.warn == "function") ? {INFO: console.info.bind(console), ERROR: console.warn.bind(console)} : {};
     
     var _formatDate = function(){
