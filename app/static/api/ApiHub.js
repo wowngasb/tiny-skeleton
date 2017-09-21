@@ -131,6 +131,17 @@ function ApiHubHelper(){
         return _rfcApi('POST', '/api/ApiHub/testPluck2' ,args, success, error, log);
     };
     this.testPluck2_args = null;
+
+    
+    this.testQuery = function(args, success, error) {
+        args = args || {};
+        var log = function(tag, use_time, args, data){
+            var f = _log_func[tag]; typeof args.csrf != "undefined" && delete args.csrf;
+            _this.DEBUG && f && f(_formatDate(), '['+tag+'] ApiHub.testQuery('+use_time+'ms)', 'args:', args, 'data:', data);
+        };
+        return _rfcApi('POST', '/api/ApiHub/testQuery' ,args, success, error, log);
+    };
+    this.testQuery_args = {"page":0,"num":20,"sort_option":["room_id","asc"],"room_id":0,"room_id_list":[],"room_title":""};
 }
 
 /*  */

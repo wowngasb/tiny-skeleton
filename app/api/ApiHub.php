@@ -10,12 +10,16 @@ namespace app\api;
 
 
 use app\api\Dao\BasicRoomDao;
+use app\api\GraphQL\ExtType\PageInfo;
 use Tiny\Abstracts\AbstractApi;
 use Tiny\Exception\ApiParamsError;
 use Tiny\Func;
+use Tiny\OrmQuery\Q;
 
 class ApiHub extends AbstractApi
 {
+
+    protected static $detail_log = true;
 
     public function beforeAction(array $params)
     {
@@ -31,6 +35,13 @@ class ApiHub extends AbstractApi
 
         if (isset($params['id'])) {
             $params['id'] = intval($params['id']);
+        }
+
+        if (isset($params['page'])) {
+            $params['page'] = $params['page'] > 1 ? intval($params['page']) : 1;
+        }
+        if (isset($params['num'])) {
+            $params['num'] = $params['num'] > 1 ? intval($params['num']) : 20;
         }
 
         return $params;
@@ -86,14 +97,41 @@ class ApiHub extends AbstractApi
         return ['room' => $roomInfo];
     }
 
-    public function testPluck(){
+    public function testPluck()
+    {
         $list = BasicRoomDao::tableItem()->pluck('room_id');
         return ['list' => $list];
     }
 
-    public function testPluck2(){
+    public function testPluck2()
+    {
         $list = BasicRoomDao::tableItem()->pluck('room_id', 'chat_topic');
         return ['list' => $list];
+    }
+
+    public function testQuery($page = 0, $num = 20, array $sort_option = ['room_id', 'asc'], $room_id = 0, array $room_id_list = [], $room_title = '')
+    {
+        $skip = ($page - 1) * $num;
+
+        $where = [
+            'room_id#_one_' => Q::where($room_id, '=', function () use ($room_id) {
+                return is_integer($room_id) && $room_id > 0;
+            }),
+            'room_id#_muti_' => Q::whereIn($room_id_list, function () use ($room_id_list) {
+                return is_array($room_id_list) && !empty($room_id_list);
+            }),
+            'room_title#_like_' => Q::where("%{$room_title}%", 'like', function () use ($room_title) {
+                return !empty($room_title);
+            }),
+        ];
+
+        $total = BasicRoomDao::countItem($where);
+        $list = BasicRoomDao::selectItem($skip, $num, $sort_option, $where);
+
+        $rst = ['list' => $list, 'total' => $total, 'pageInfo' => PageInfo::buildPageInfo($total, $num, $page)];
+        self::$detail_log && self::debugArgs(func_get_args(), __METHOD__, __CLASS__, __LINE__);
+        self::$detail_log && self::debugResult($rst, __METHOD__, __CLASS__, __LINE__);
+        return $rst;
     }
 
 }

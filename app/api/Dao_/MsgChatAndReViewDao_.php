@@ -35,7 +35,7 @@ class MsgChatAndReViewDao_ extends BaseDao
         if (!isset(static::$_orm_config_map[$class_name])) {
             $db_config = Application::get_config('ENV_DB');
             $db_name = !empty($db_config['database']) ? $db_config['database'] : 'test';
-            static::$_orm_config_map[$class_name] = new OrmConfig($db_name, 'msg_chat_and_review', 'msg_id', static::$cache_time, static::$max_select);
+            static::$_orm_config_map[$class_name] = new OrmConfig($db_name, 'msg_chat_and_review', 'msg_id', static::$cache_time, static::$max_select, static::$debug);
         }
         return static::$_orm_config_map[$class_name];
     }

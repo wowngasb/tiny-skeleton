@@ -22,7 +22,7 @@ final class Bootstrap extends AbstractBootstrap
      */
     public static function bootstrap(Application $app)
     {
-        if ($app->getBootstrapCompleted()) {
+        if ($app->isBootstrapCompleted()) {
             return $app;
         }
         $app->addRoute('api', new RouteMap('/api', 'api', ['api', 'ApiHub', 'hello']), new ApiDispatch())
