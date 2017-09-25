@@ -29,7 +29,7 @@ class GraphQLApi extends AbstractApi
         ]);
         $debug = false;
         $phpErrors = [];  // Catch custom errors (to report them in query results if debugging is enabled)
-        if (Application::is_dev()) {
+        if (Application::dev()) {
             $schema->assertValid(); // Enable additional validation of type configs (disabled by default because it is costly)
             set_error_handler(function ($severity, $message, $file, $line) use (&$phpErrors) {
                 $phpErrors[] = new ErrorException($message, 0, $severity, $file, $line);
@@ -48,7 +48,7 @@ class GraphQLApi extends AbstractApi
             )->toArray($debug);
 
             // Add reported PHP errors to result (if any)
-            if (Application::is_dev() && !empty($phpErrors)) {
+            if (Application::dev() && !empty($phpErrors)) {
                 $result['extensions']['phpErrors'] = array_map(['GraphQL\Error\FormattedError', 'createFromPHPError'], $phpErrors);
             }
         } catch (\Exception $error) {

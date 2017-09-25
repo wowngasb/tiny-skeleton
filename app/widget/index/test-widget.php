@@ -1,7 +1,7 @@
 <?php
 /** @var array $routeInfo */
 /** @var string $appname */
-/** @var \Tiny\Request $request */
+/** @var \Tiny\Interfaces\RequestInterface $request */
 /** @var array $tpl_vars */
 
 /** @var string $title */
