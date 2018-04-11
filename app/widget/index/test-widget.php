@@ -15,15 +15,15 @@
     <li><?= $item ?></li>
 <?php } ?>
 
-<?= \Tiny\Plugin\Fis::styleStart() ?>
+<?= \Tiny\Plugin\Fis::styleStart($response) ?>
 <style type="text/css">
     #widget-test {
         color: #2fd058;
     }
 </style>
-<?= \Tiny\Plugin\Fis::styleEnd() ?>
+<?= \Tiny\Plugin\Fis::styleEnd($response) ?>
 
-<?= \Tiny\Plugin\Fis::scriptStart() ?>
+<?= \Tiny\Plugin\Fis::scriptStart($response) ?>
 <script type="text/javascript">
     $(function () {
         var xxx = require('static/api/ApiHub');
@@ -31,7 +31,11 @@
             $('#widget-test').text( res.info );
         });
     });
-</script><?= \Tiny\Plugin\Fis::scriptEnd() ?>
+
+    require.async('static/api/GraphQLApi.js',function(obj){
+        console.log(obj);
+    });
+</script><?= \Tiny\Plugin\Fis::scriptEnd($response) ?>
 
 
 

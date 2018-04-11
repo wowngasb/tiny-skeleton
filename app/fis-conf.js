@@ -41,7 +41,7 @@ fis.match('*', {
     deploy: [
         autoBuildApi,
         fis.plugin('local-deliver', {
-            to: './../app-public'
+            to: './../public'
         })
     ]
 });

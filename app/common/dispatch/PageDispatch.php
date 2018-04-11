@@ -11,14 +11,14 @@ namespace app\common\dispatch;
 
 use Exception;
 use Tiny\Abstracts\AbstractContext;
+use Tiny\Abstracts\AbstractDispatch;
 use Tiny\Application;
-use Tiny\Func;
-use Tiny\Interfaces\DispatchInterface;
 use Tiny\Interfaces\RequestInterface;
 use Tiny\Interfaces\ResponseInterface;
+use Tiny\Util as Func;
 
 
-class PageDispatch implements DispatchInterface
+class PageDispatch extends AbstractDispatch
 {
 
     /**
@@ -50,8 +50,8 @@ class PageDispatch implements DispatchInterface
      */
     public static function initMethodNamespace(array $routeInfo)
     {
-        $controller = (!empty($routeInfo[1]) ? Func::trimlower($routeInfo[1]) : 'index') . 'Controller';
-        $module = !empty($routeInfo[0]) ? Func::trimlower($routeInfo[0]) : 'index';
+        $controller = (!empty($routeInfo[1]) ? ($routeInfo[1]) : 'index') . 'Controller';
+        $module = !empty($routeInfo[0]) ? ($routeInfo[0]) : 'index';
 
         return "\\" . Func::joinNotEmpty("\\", [Application::app()->getAppName(), $module, $controller]);
     }
@@ -66,7 +66,7 @@ class PageDispatch implements DispatchInterface
      */
     public static function initMethodContext(RequestInterface $request, ResponseInterface $response, $namespace, $action)
     {
-        $request->session_start($response);  // 开启 session
+        $request->session_start();  // 开启 session
         return Application::initMethodContext($request, $response, $namespace, $action);
     }
 

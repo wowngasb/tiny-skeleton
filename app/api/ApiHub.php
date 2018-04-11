@@ -12,8 +12,8 @@ namespace app\api;
 use app\api\Dao\BasicRoomDao;
 use app\api\GraphQL\ExtType\PageInfo;
 use Tiny\Abstracts\AbstractApi;
-use Tiny\Exception\ApiParamsError;
-use Tiny\Func;
+use Tiny\Exception\AuthError;
+use Tiny\Util as Func;
 use Tiny\OrmQuery\Q;
 
 class ApiHub extends AbstractApi
@@ -28,7 +28,7 @@ class ApiHub extends AbstractApi
             $params['name'] = trim(strval($params['name']));
         }
 
-        if (Func::stri_cmp('testSum', $this->getActionName())) {
+        if (Func::stri_cmp('testSum', $this->_getActionName())) {
             $params['a'] = intval($params['a']);
             $params['b'] = intval($params['b']);
         }
@@ -67,7 +67,7 @@ class ApiHub extends AbstractApi
     public function testError($id)
     {
         if ($id <= 0) {
-            throw new ApiParamsError('id must gt 0');
+            throw new AuthError('id must gt 0');
         }
         return ['id' => $id, 'info' => 'some info'];
     }
@@ -99,13 +99,13 @@ class ApiHub extends AbstractApi
 
     public function testPluck()
     {
-        $list = BasicRoomDao::tableItem()->pluck('room_id');
+        $list = BasicRoomDao::tableBuilder()->pluck('room_id');
         return ['list' => $list];
     }
 
     public function testPluck2()
     {
-        $list = BasicRoomDao::tableItem()->pluck('room_id', 'chat_topic');
+        $list = BasicRoomDao::tableBuilder()->pluck('room_id', 'chat_topic');
         return ['list' => $list];
     }
 

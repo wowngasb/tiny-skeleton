@@ -10,19 +10,18 @@ namespace app\common\base;
 
 
 use Tiny\Application;
-use Tiny\Controller\ControllerFis;
-use Tiny\Func;
+use Tiny\Controller\FisController;
+use Tiny\Util as Func;
 
-class BaseControllerFis extends ControllerFis
+class BaseControllerFis extends FisController
 {
     public function beforeAction(array $params)
     {
         $params = parent::beforeAction($params);
 
-        $appname = Application::app()->getAppName();
-        $config_dir = ROOT_PATH . Func::joinNotEmpty(DIRECTORY_SEPARATOR, ["{$appname}-public", 'tpl']);
-        $template_dir = ROOT_PATH . Func::joinNotEmpty(DIRECTORY_SEPARATOR, ["{$appname}-public", 'tpl']);
-        $this->setFisReleasePath($config_dir, $template_dir);
+        $config_dir = ROOT_PATH . Func::joinNotEmpty(DIRECTORY_SEPARATOR, ["public", 'tpl']);
+        $template_dir = ROOT_PATH . Func::joinNotEmpty(DIRECTORY_SEPARATOR, ["public", 'tpl']);
+        self::setFisPath($config_dir, $template_dir);
         $env_web = Application::config('ENV_WEB', []);
         $this->assign('webname', !empty($env_web['name']) ? $env_web['name'] : '');
 
