@@ -1,0 +1,21 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
+
+    RewriteEngine On
+
+    RewriteRule ^helper/ws_user.js(.*)$ helper/ws_user_js.php [L,QSA]
+    RewriteRule ^helper/ws_player.js(.*)$ helper/ws_player_js.php [L,QSA]
+    # RewriteRule ^helper/wsplayer.js(.*)$ helper/wsplayer_js.php [L,QSA]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+</IfModule>

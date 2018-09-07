@@ -1,0 +1,266 @@
+{
+    "productList": [{
+        "name": "api-marketplace",
+        "showName": "API 市场",
+        "showNameEn": "API Marketplace",
+        "shortName": "API-Marketplace",
+        "supportLanguages": ["zh"],
+        "displayName": "API 市场",
+        "displaySubName": "API-Marketplace",
+        "active": false
+    },
+    {
+        "name": "Ecs",
+        "showName": "云服务器 ECS",
+        "showNameEn": "Elastic Compute Service",
+        "shortName": "ECS",
+        "version": "2014-05-26",
+        "apiDocPath": "https://help.aliyun.com/document_detail/25485.html",
+        "apiSdkPath": "https://help.aliyun.com/document_detail/25699.html",
+        "endpoint": {
+            "default": "http://ecs.aliyuncs.com"
+        },
+        "displayName": "云服务器 ECS",
+        "displaySubName": "ECS",
+        "active": true
+    },
+    {
+        "name": "Oss",
+        "showName": "对象存储 OSS",
+        "showNameEn": "Object Storage Service",
+        "shortName": "OSS",
+        "version": "2018-01-01",
+        "apiDocPath": "https://help.aliyun.com/document_detail/31948.html",
+        "apiSdkPath": "https://help.aliyun.com/document_detail/52834.html",
+        "endpoint": {
+            "default": "http://oss.aliyuncs.com"
+        },
+        "displayName": "对象存储 OSS",
+        "displaySubName": "OSS"
+    },
+    {
+        "name": "Vpc",
+        "showName": "专有网络 VPC",
+        "showNameEn": "Virtual Private Cloud",
+        "shortName": "VPC",
+        "version": "2016-04-28",
+        "apiDocPath": "https://help.aliyun.com/document_detail/34962.html",
+        "apiSdkPath": "https://help.aliyun.com/document_detail/27779.html",
+        "endpoint": {
+            "default": "http://vpc.aliyuncs.com"
+        },
+        "displayName": "专有网络 VPC",
+        "displaySubName": "VPC"
+    },
+    {
+        "name": "Ram",
+        "showName": "访问控制 RAM",
+        "showNameEn": "Resource Access Management",
+        "shortName": "RAM",
+        "version": "2015-05-01",
+        "apiDocPath": "https://help.aliyun.com/document_detail/28672.html",
+        "apiSdkPath": "https://help.aliyun.com/document_detail/28770.html",
+        "endpoint": {
+            "default": "https://ram.aliyuncs.com"
+        },
+        "displayName": "访问控制 RAM",
+        "displaySubName": "RAM"
+    },
+    {
+        "name": "Sts",
+        "showName": "安全令牌 STS",
+        "showNameEn": "Security Token Service",
+        "shortName": "STS",
+        "version": "2015-04-01",
+        "apiDocPath": "https://help.aliyun.com/document_detail/28756.html",
+        "apiSdkPath": "https://help.aliyun.com/document_detail/28787.html",
+        "endpoint": {
+            "default": "https://sts.aliyuncs.com"
+        },
+        "displayName": "安全令牌 STS",
+        "displaySubName": "STS"
+    },
+    {
+        "name": "Cms",
+        "showName": "云监控 CMS",
+        "showNameEn": "Cloud Monitor",
+        "shortName": "CMS",
+        "version": "2018-03-08",
+        "apiDocPath": "https://help.aliyun.com/document_detail/28615.html",
+        "apiSdkPath": "https://help.aliyun.com/document_detail/28621.html",
+        "endpoint": {
+            "default": "http://metrics.aliyuncs.com"
+        },
+        "displayName": "云监控 CMS",
+        "displaySubName": "CMS"
+    },
+    {
+        "name": "Rds",
+        "showName": "云数据库 RDS",
+        "showNameEn": "ApsaraDB for RDS",
+        "shortName": "RDS",
+        "version": "2014-08-15",
+        "apiDocPath": "https://help.aliyun.com/document_detail/26226.html",
+        "apiSdkPath": "https://help.aliyun.com/document_detail/26319.html",
+        "endpoint": {
+            "default": "http://rds.aliyuncs.com"
+        },
+        "displayName": "云数据库 RDS",
+        "displaySubName": "RDS"
+    },
+    {
+        "name": "Slb",
+        "showName": "负载均衡 SLB",
+        "showNameEn": "Server Load Balancer",
+        "shortName": "SLB",
+        "version": "2014-05-15",
+        "apiDocPath": "https://help.aliyun.com/document_detail/27566.html",
+        "apiSdkPath": "https://help.aliyun.com/document_detail/43147.html",
+        "endpoint": {
+            "default": "https://slb.aliyuncs.com",
+            "ap-northeast-1": "https://slb.ap-northeast-1.aliyuncs.com",
+            "eu-central-1": "https://slb.eu-central-1.aliyuncs.com",
+            "me-east-1": "https://slb.me-east-1.aliyuncs.com",
+            "ap-southeast-2": "https://slb.ap-southeast-2.aliyuncs.com",
+            "ap-southeast-3": "https://slb.ap-southeast-3.aliyuncs.com",
+            "ap-southeast-5": "https://slb.ap-southeast-5.aliyuncs.com",
+            "cn-zhangjiakou": "https://slb.cn-zhangjiakou.aliyuncs.com",
+            "cn-huhehaote": "https://slb.cn-huhehaote.aliyuncs.com",
+            "ap-south-1": "https://slb.ap-south-1.aliyuncs.com"
+        },
+        "displayName": "负载均衡 SLB",
+        "displaySubName": "SLB",
+        "active": false
+    },
+    {
+        "name": "Dds",
+        "showName": "云数据库 MongoDB",
+        "showNameEn": "ApsaraDB for MongoDB",
+        "shortName": "MongoDB",
+        "version": "2015-12-01",
+        "apiDocPath": "https://help.aliyun.com/document_detail/61715.html",
+        "apiSdkPath": "https://help.aliyun.com/document_detail/62676.html",
+        "endpoint": {
+            "default": "https://mongodb.aliyuncs.com"
+        },
+        "displayName": "云数据库 MongoDB",
+        "displaySubName": "MongoDB"
+    },
+    {
+        "name": "polardb",
+        "showName": "云数据库 POLARDB",
+        "showNameEn": "ApsaraDB for POLARDB",
+        "shortName": "POLARDB",
+        "version": "2017-08-01",
+        "apiDocPath": "https://help.aliyun.com/product/58609.html",
+        "apiSdkPath": "https://help.aliyun.com/product/58609.html",
+        "endpoint": {
+            "default": "https://polardb.aliyuncs.com"
+        },
+        "displayName": "云数据库 POLARDB",
+        "displaySubName": "POLARDB"
+    },
+    {
+        "name": "R-kvstore",
+        "showName": "云数据库 Redis",
+        "showNameEn": "ApsaraDB for Redis",
+        "shortName": "Redis",
+        "version": "2015-01-01",
+        "apiDocPath": "https://help.aliyun.com/document_detail/60831.html",
+        "apiSdkPath": "https://help.aliyun.com/document_detail/61144.html",
+        "endpoint": {
+            "default": "https://r-kvstore.aliyuncs.com"
+        },
+        "displayName": "云数据库 Redis",
+        "displaySubName": "Redis"
+    },
+    {
+        "name": "HBase",
+        "showName": "云数据库 HBase",
+        "showNameEn": "ApsaraDB for HBase",
+        "shortName": "HBase",
+        "version": "2017-01-15",
+        "apiDocPath": "https://help.aliyun.com/product/49055.html",
+        "apiSdkPath": "https://help.aliyun.com/product/49055.html",
+        "endpoint": {
+            "default": "https://hbase.aliyuncs.com"
+        },
+        "displayName": "云数据库 HBase",
+        "displaySubName": "HBase"
+    },
+    {
+        "name": "hitsdb",
+        "showName": "云数据库 HiTSDB",
+        "showNameEn": "ApsaraDB for HiTSDB",
+        "shortName": "HiTSDB",
+        "version": "2017-06-01",
+        "apiDocPath": "https://help.aliyun.com/document_detail/62386.html",
+        "apiSdkPath": "https://help.aliyun.com/document_detail/61633.html",
+        "endpoint": {
+            "default": "https://hitsdb.aliyuncs.com"
+        },
+        "displayName": "云数据库 HiTSDB",
+        "displaySubName": "HiTSDB"
+    },
+    {
+        "name": "Cdn",
+        "showName": "内容分发 CDN",
+        "showNameEn": "CDN",
+        "shortName": "CDN",
+        "version": "2014-11-11",
+        "apiDocPath": "https://help.aliyun.com/document_detail/27155.html",
+        "apiSdkPath": "https://help.aliyun.com/document_detail/27234.html",
+        "endpoint": {
+            "default": "http://cdn.aliyuncs.com"
+        },
+        "displayName": "内容分发 CDN",
+        "displaySubName": "CDN",
+        "active": false
+    },
+    {
+        "name": "Cbn",
+        "showName": "云企业网 CEN",
+        "showNameEn": "Cloud Enterprise Network",
+        "shortName": "CEN",
+        "version": "2017-09-12",
+        "apiDocPath": "",
+        "apiSdkPath": "",
+        "endpoint": {
+            "default": "http://cbn.aliyuncs.com"
+        },
+        "displayName": "云企业网 CEN",
+        "displaySubName": "CEN"
+    },
+    {
+        "name": "Emr",
+        "showName": "E-MapReduce",
+        "showNameEn": "E-MapReduce",
+        "shortName": "EMR",
+        "version": "2016-04-08",
+        "apiDocPath": "https://help.aliyun.com/document_detail/28140.html",
+        "apiSdkPath": "https://help.aliyun.com/document_detail/28182.html",
+        "endpoint": {
+            "default": "https://emr.aliyuncs.com"
+        },
+        "displayName": "E-MapReduce",
+        "displaySubName": "EMR"
+    },
+    {
+        "name": "Nas",
+        "showName": "文件存储 NAS",
+        "showNameEn": "Network Attached Storage",
+        "shortName": "NAS",
+        "version": "2017-06-26",
+        "apiDocPath": "https://help.aliyun.com/document_detail/62598.html",
+        "apiSdkPath": "https://develop.aliyun.com/tools/sdk#/java",
+        "endpoint": {
+            "default": "https://nas.aliyuncs.com"
+        },
+        "displayName": "文件存储 NAS",
+        "displaySubName": "NAS"
+    }],
+    "username": "58wen****",
+    "domain": "https://api.aliyun.com/",
+    "token": "EMtOWqbm-9sAlHE8q5BgMiUahJfbIjfECuEo",
+    "lang": "zh"
+}

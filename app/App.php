@@ -1,12 +1,13 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: kongl
- * Date: 2018/3/9 0009
- * Time: 10:35
+ * User: admin
+ * Date: 2017/10/24
+ * Time: 15:57
  */
 
 namespace app;
+
 
 use Tiny\Application;
 

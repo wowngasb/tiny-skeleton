@@ -1,34 +1,46 @@
 <?php
-
 /**
  * Created by PhpStorm.
- * User: a
- * Date: 2017/9/8
- * Time: 14:18
+ * User: kongl
+ * Date: 2018/3/5 0005
+ * Time: 18:13
  */
 
 namespace app\api\GraphQL\ExtType;
 
+use app\api\GraphQL_\ExtType\PageInfo as _PageInfo;
 
-class PageInfo extends \app\api\GraphQL_\ExtType\PageInfo
+class PageInfo extends _PageInfo
 {
-    public static function buildPageInfo($total = 0, $num = 10, $page = 1)
+
+    public static function buildPageInfoEx($list, array $offset, $sortOption = [], $allowSortField = [])
     {
-        if (empty($total) || $total < -1) {
-            $total = 0;
-        }
-        if (empty($num) || $num <= 0) {
-            $num = 10;
-        }
-        if (empty($page) || $page <= 0) {
-            $page = 1;
-        }
+        return [
+            'rows' => $list,
+            'pageInfo' => static::buildPageInfo($offset['page'], $offset['num'], $offset['total'], $sortOption, $allowSortField),
+        ];
+    }
+
+    public static function buildPageInfo($page, $num, $total, $sortOption = [], $allowSortField = [])
+    {
+        $page = intval($page);
+        $num = intval($num);
+        $total = intval($total);
+        $page = $page > 1 ? $page : 1;
+        $num = $num > 1 ? $num : 1;
+        $total = ($total >= 0 || $total == -1) ? $total : 0;
+
         return [
             'num' => $num,
             'page' => $page,
             'total' => $total,
-            'hasPreviousPage' => !($page == 1),
-            'hasNextPage' => ($total > $page * $num || $total < 0)
+            'hasPreviousPage' => $page > 1,
+            'hasNextPage' => ($total > $page * $num || $total == -1),
+            'sortOption' => [
+                'field' => !empty($sortOption['field']) ? $sortOption['field'] : '',
+                'direction' => !empty($sortOption['direction']) ? $sortOption['direction'] : 'asc',
+            ],
+            'allowSortField' => $allowSortField,
         ];
     }
 

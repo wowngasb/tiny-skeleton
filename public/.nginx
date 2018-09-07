@@ -1,0 +1,7 @@
+rewrite "^/helper/ws_user\.js(.*)" /helper/ws_user_js.php last;
+rewrite "^/helper/ws_player\.js(.*)" /helper/ws_player_js.php last;
+# rewrite "^/helper/wsplayer\.js(.*)" /helper/wsplayer_js.php last;
+
+if (!-e $request_filename) {
+    rewrite ^/(.*)  /index.php/$1 last;
+}

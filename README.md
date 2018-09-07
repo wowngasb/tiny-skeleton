@@ -1,83 +1,66 @@
-# 数据模型
+# 介绍
 
-数据模型使用`GraphQL`定义，后端使用`graphql-php`实现
+## 后台入口 
 
+http://test-steel.wenshunsoft.com/auth
 
-> [GraphQL](https://github.com/facebook/graphql) GraphQL is a query language and execution engine tied to any backend service. [doc](http://facebook.github.io/graphql/)
+测试环境 超管帐号  super_mgr
+测试环境 统一密码  ws123456
 
-> [graphql-php](https://github.com/webonyx/graphql-php) A PHP port of GraphQL reference implementation [doc](http://webonyx.github.io/graphql-php/)
+## 网站管理  
 
-安装php依赖
+http://test-steel.wenshunsoft.com/mgr/auth
 
-``` shell
-composer update
-```
+测试环境 财务测试  xdy_caiwu   网站测试   xdy_seo
+测试环境 统一密码  ws123456
 
-# DEMO 
+# 测试 直播帐号
 
-POST到接口 `/api/GraphQLApi/exec` 参数 `query` 查询语句，`variables` 查询绑定变量
+帐号  mcs_demo  密码  ws123456
 
-## 类型实现
+# 测试 播放地址
 
-继承并实现 GraphQL 中的数据模型  实现类型注册
+http://test-steel.wenshunsoft.com/helper/room.php?r=1000
 
-## 接口测试 [GraphiQL]()
+http://test-steel.wenshunsoft.com/helper/room1.php?room_id=1000
 
-[接口测试](/static/GraphiQL/)
+http://test-steel.wenshunsoft.com/helper/room2.php?room_id=1000
 
+# 测试 播放地址
 
-``` gql
-{
-  hello,
-  user(user_id:1001){
-    user_id,
-    nick,
-    avatar
-  }
-}
-```
+http://test-steel.wenshunsoft.com/helper/room.php?v=1366
 
-# 测试数据
+http://test-steel.wenshunsoft.com/helper/room1.php?vod_id=1366
 
-测试数据 位于 `db-migrate` 目录下
+http://test-steel.wenshunsoft.com/helper/room2.php?vod_id=1366
 
-使用 `Flask-SQLAlchemy` 和 `SQLAlchemy-migrate` 管理数据库部署
+# 常用资源
 
-> 文档 [Flask 中的数据库](http://www.pythondoc.com/flask-mega-tutorial/database.html#id4)
+[graphql-php](https://github.com/webonyx/graphql-php)
 
-## 创建数据库
-``` shell
-python db_create.py
-```
+[laravel-orm](https://laravel-china.org/docs/laravel/5.2/queries/1137)
 
-## 增加数据库版本
-``` shell
-python db_migrate.py
-```
+[Tiny](https://github.com/wowngasb/tiny)
 
-## 数据库升级
-``` shell
-python db_upgrade.py
-```
+# 播放器 测试 CDN 地址
 
-## 测试数据导入
-``` shell
-python db_seed.py
-```
+## 基础播放器 测试
 
-# 前端页面
+[htsbplayer](http://staticzy.wenshunsoft.com/test/htsbplayer.html)
 
-安装js依赖
+[dist-htsbplayer](http://staticzy.wenshunsoft.com/test/dist-htsbplayer.html)
 
-``` shell
-npm install cnpm -g
-cnpm install webpack -g
-cnpm install
-```
+## 直播播放器 测试
 
-打包文件
-``` shell
-webpack -w
-```
+[htslplayer](http://staticzy.wenshunsoft.com/test/htslplayer.html)
+
+[dist-htslplayer](http://staticzy.wenshunsoft.com/test/dist-htslplayer.html)
+
+## 点播播放器 测试
+
+[htshplayer](http://staticzy.wenshunsoft.com/test/htshplayer.html)
+
+[dist-htshplayer](http://staticzy.wenshunsoft.com/test/dist-htshplayer.html)
+
 
 

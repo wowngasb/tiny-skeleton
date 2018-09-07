@@ -1,3 +1,6 @@
 # Ignore everything in this directory
 *
+!view_tpl/
+!fast_route/
 !.gitignore
+!.htaccess

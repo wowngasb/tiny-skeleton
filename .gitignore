@@ -14,18 +14,20 @@ Thumbs.db
 *.pyo
 
 
+vendor/
+
 composer.lock
 package-lock.json
-themes/
 
 
-vendor/
 node_modules/
-markdown/
 
 /public/phpinfo.php
-/public/robots.txt
+/public/assets/dist/*.js.map
+/public/assets/dist_dev/*.js.map
 
 /test.php
 /phpinfo.php
-app-migrate/config.py
+
+public/assets/index.blade.php
+database/generation/models.py

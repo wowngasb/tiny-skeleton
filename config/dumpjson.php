@@ -1,5 +1,7 @@
 <?php
 
+require_once(dirname(__DIR__) . '/vendor/autoload.php');
+
 ob_start();
 ob_implicit_flush(false);
 
@@ -45,7 +47,9 @@ function FixedJsonEncode($data)
 }
 
 $infile = !empty($argv[1]) ? trim($argv[1]) : '';
-$json_str = is_file($infile) ? FixedJsonEncode(include_once($infile)) : '';
+$json_arr = is_file($infile) ? include_once($infile) : [];
+unset($json_arr['content'], $json_arr['services'], $json_arr['super'], $json_arr['agent'], $json_arr['parent'], $json_arr['sub']);
+$json_str = FixedJsonEncode($json_arr);
 
 ob_end_clean();
 echo $json_str;

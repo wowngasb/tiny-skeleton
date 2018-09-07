@@ -1,49 +1,63 @@
 <?php
 
-if (!defined('ROOT_PATH')) {
-    // 定义 ROOT_PATH 会辅助 Tiny 框架找到项目根目录
-    define("ROOT_PATH", dirname(__DIR__) . DIRECTORY_SEPARATOR);
+if (!function_exists('__build_config__')) {
+    function __build_config__()
+    {
+        ini_set('display_errors', 0);
+        ini_set('log_errors', 1);
+        date_default_timezone_set('Asia/Shanghai');
 
-    //define('XHPROF', 'XHPROF:CPU+MEMORY+BUILTINS');  //开启XHPROF性能分析
-    define('PLUGIN_PATH', ROOT_PATH . 'plugin' . DIRECTORY_SEPARATOR);
-    define('SYSTEM_HOST', (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" ? 'https://' : 'http://') . (isset($_SERVER['HTTP_HOST']) ? "{$_SERVER['HTTP_HOST']}/" : 'localhost/'));  //SYSTEM_HOST 常量
+        $root_path = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+        $cache_path = $root_path . 'cache' . DIRECTORY_SEPARATOR;
 
-    ini_set('display_errors', 0);
-    ini_set('log_errors', 1);
-    date_default_timezone_set('Asia/Shanghai');
+        // just help ide find include file, not necessary
+        !defined('PLUGIN_PATH') && define('PLUGIN_PATH', $root_path . 'plugin' . DIRECTORY_SEPARATOR);
+
+        return [
+            'services' => require($root_path . 'config/services.php'),
+            'super' => require($root_path . 'config/super.php'),
+            'agent' => require($root_path . 'config/agent.php'),
+            'parent' => require($root_path . 'config/parent.php'),
+            'sub' => require($root_path . 'config/sub.php'),
+            'ENVIRON' => 'debug',
+            'ROOT_PATH' => $root_path,
+            'CACHE_PATH' => $cache_path,
+            'ENV_CRYPT_KEY' => 'aaaa',
+            'ENV_DEVELOP_KEY' => 'aaaa',
+            'ENV_LOG' => [
+                'path' => $root_path . 'logs' . DIRECTORY_SEPARATOR,  //日志文件存放地址
+                'level' => 'DEBUG',  //日志记录级别  ['ALL' => 0, 'DEBUG' => 10, 'INFO' => 20, 'WARN' => 30, 'ERROR' => 40, 'FATAL' => 50, 'OFF' => 60,]
+            ],
+            'ENV_CACHE' => [
+                'type' => 'files',
+                'config' => [
+                    'path' => $cache_path
+                ]
+            ],
+            'ENV_REDIS' => [
+                'host' => '0.0.0.0',
+                'port' => 6378,
+                'password' => 'aaaa',
+                'database' => 1,
+            ],  // 直接使用 redis
+            'ENV_DB' => [
+                'driver' => 'mysql',
+                'host' => '0.0.0.0',
+                'port' => 3306,
+                'database' => 'aaaa',
+                'username' => 'aaaa',
+                'password' => 'aaaa',
+                // python db2model.py mysql://devws:"07upQDmPEh&VLI#0"@47.97.25.236:3306/steel_v2?charset=gbk > models.py
+            ],
+            'ENV_WEB' => [
+                'countly_pre' => 'steeltest',
+                'devsrv' => 'http://tiny.app',
+                'name' => '鑫斗云',
+                'ver' => \app\Util::short_md5(\app\Util::load_git_ver($root_path)['git_ver']),
+                'cdn' => ''
+            ],
+        ];
+    }
 }
 
-
-return [
-    'ENVIRON' => 'debug',
-    'ENV_LOG' => [
-        'path' => ROOT_PATH . 'logs' . DIRECTORY_SEPARATOR,  //日志文件存放地址
-        'level' => 'DEBUG',  //日志记录级别  ['ALL' => 0, 'DEBUG' => 10, 'INFO' => 20, 'WARN' => 30, 'ERROR' => 40, 'FATAL' => 50, 'OFF' => 60,]
-    ],
-    'ENV_CACHE' => [
-        'type' => 'files',
-        'config' => [
-            'path' => ROOT_PATH . 'cache' . DIRECTORY_SEPARATOR
-        ]
-        /*
-        'type' => 'redis',
-        'config' => [
-            'host' => '127.0.0.1',
-            'port' => 6379,
-            'password' => '',
-        ]
-        */
-    ],
-    'ENV_DB' => [
-        'driver' => 'mysql',
-        'host' => '127.0.0.1',
-        'database' => 'test',
-        'username' => 'root',
-        'password' => '',
-    ],
-    'ENV_CRYPT_KEY' => '',
-    'ENV_DEVELOP_KEY' => '',
-    'ENV_WEB' => [
-        'name' => 'Tiny Demo'
-    ]
-];
+return __build_config__();

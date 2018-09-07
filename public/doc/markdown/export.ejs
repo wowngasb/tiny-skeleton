@@ -1,0 +1,66 @@
+var export_to=App.ShowFileDialog(false, "", "");
+if( export_to.length )
+{
+	Include(App.AppPath+"\\mode\\markdown\\Markdown.Converter.js")
+	Include(App.AppPath+"\\mode\\markdown\\Markdown.Extra.js")
+
+	var doc=App.ActiveDoc;
+	var text = doc.Text
+
+	var fso = new ActiveXObject("Scripting.FileSystemObject")
+	var file_name=fso.GetBaseName( doc.PathName );
+
+	if( file_name.length==0 )
+		file_name="Markdown Preview";
+
+	var converter = new Markdown.Converter();
+	Markdown.Extra.init(converter);
+	var html = converter.makeHtml(text);
+
+	var file = new ActiveXObject("Adodb.Stream");
+	file.Type = 2;
+	file.Open();
+	file.Charset = "utf-8";
+
+	var css=App.AppPath+"\\mode\\markdown\\" + "default.css";
+	var prettify_js=App.AppPath+"\\mode\\markdown\\" + "prettify.js";
+	var prettify_css=App.AppPath+"\\mode\\markdown\\" + "prettify.css";
+	var jquery_js=App.AppPath+"\\mode\\markdown\\" + "jquery-1.10.2.min.js";
+	var toc_js=App.AppPath+"\\mode\\markdown\\" + "toc.js";
+
+	var header="<html>\n\
+	<!doctype html public '-//W3C//DTD HTML 4.0 Transitional //EN'>\n\
+	<head>\n\
+	<title>"+file_name+"</title>\n\
+	<meta name='generator' content='EverEdit' />\n\
+	<link href='" + css + "' rel='stylesheet'></link>\n\
+	<link href='" + prettify_css + "' rel='stylesheet'></link>\n\
+	<script type='text/javascript' src='" + prettify_js + "'></script>\n\
+	<script type='text/javascript' src='" + jquery_js + "'></script>\n\
+	<script type='text/javascript' src='" + toc_js + "'></script>\n\
+	</head>\n\
+	<body>\n\
+	<div id='generated-toc'></div>\n";
+
+
+	var footer="\n\
+	<script type='text/javascript'>\n\
+	$(document).ready(function(){\n\
+	  if($('code').length>0){\n\
+	    $('code').parent().addClass('prettyprint');\n\
+	    prettyPrint();\n\
+	};\n\
+	});\n\
+	</script>\n\
+	</body>\n\
+	</html>";
+
+	file.WriteText(header);
+	file.WriteText(html);
+	file.WriteText(footer);
+	file.SaveToFile(export_to,2);
+	file.Close();
+
+	var msg="Saved to [" + export_to + "]";
+	App.ShowMsgBox( msg, "Markdown2Html", 64);
+}
